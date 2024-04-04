@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp
+package com.beapps.thedoctorapp.core.presentation
 
 import android.os.Bundle
 import android.util.Log
