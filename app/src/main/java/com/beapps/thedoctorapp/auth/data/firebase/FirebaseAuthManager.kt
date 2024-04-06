@@ -27,7 +27,7 @@ class FirebaseAuthManager : AuthManager {
     private val collectionName = "doctors"
     private val db = FirebaseFirestore.getInstance()
 
-    override fun login(email: String, password: String): Flow<Result<Doctor, Error.AuthError>> {
+    override fun login(email: String, password: String): Flow<Result<Doctor, Error.AuthError.LoginError>> {
 
         return flow {
             try {
@@ -37,7 +37,7 @@ class FirebaseAuthManager : AuthManager {
                     .await()
 
                 if (result.isEmpty) {
-                    emit(Result.Error(Error.AuthError.IncorrectEmail))
+                    emit(Result.Error(Error.AuthError.LoginError.IncorrectEmail))
                     return@flow
                 }
 
@@ -50,10 +50,10 @@ class FirebaseAuthManager : AuthManager {
                     }
                 }
 
-                emit(Result.Error(Error.AuthError.IncorrectPassword))
+                emit(Result.Error(Error.AuthError.LoginError.IncorrectPassword))
 
             } catch (e: Exception) {
-                emit(Result.Error(Error.AuthError.UndefinedError(e.message ?: "Unknown Error")))
+                emit(Result.Error(Error.AuthError.LoginError.UndefinedLoginError(e.message ?: "Unknown Error")))
             }
         }
     }
@@ -64,7 +64,7 @@ class FirebaseAuthManager : AuthManager {
         phoneNum: String,
         email: String,
         password: String
-    ): Result<Doctor, Error.AuthError> {
+    ): Result<Doctor, Error.AuthError.RegisterError> {
         val doctor = DoctorDto(
             name = name,
             phoneNum = phoneNum,
@@ -72,7 +72,7 @@ class FirebaseAuthManager : AuthManager {
             password = password,
             surname = surname
         )
-        if (ifUserAlreadyExits(email)) return Result.Error(Error.AuthError.UserAlreadyExitsError)
+        if (ifUserAlreadyExits(email)) return Result.Error(Error.AuthError.RegisterError.UserAlreadyExitsError)
         return try {
             val result = db.collection(collectionName)
                 .add(doctor)
@@ -80,7 +80,7 @@ class FirebaseAuthManager : AuthManager {
             val newDoctor = doctor.toDoctor().copy(id = result.id)
             Result.Success(newDoctor)
         } catch (e: Exception) {
-            Result.Error(Error.AuthError.UndefinedError(e.message ?: "Unknown Error"))
+            Result.Error(Error.AuthError.RegisterError.UndefinedRegisterError(e.message ?: "Unknown Error"))
         }
     }
 

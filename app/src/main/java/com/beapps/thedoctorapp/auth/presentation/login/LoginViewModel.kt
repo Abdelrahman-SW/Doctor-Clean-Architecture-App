@@ -38,19 +38,15 @@ class LoginViewModel @Inject constructor(
                 when(result) {
                     is Result.Error -> {
                         when(result.error) {
-                            Error.AuthError.IncorrectEmail -> {
+                            Error.AuthError.LoginError.IncorrectEmail -> {
                                 Log.d("ab_do" , "IncorrectEmail")
                             }
-                            Error.AuthError.IncorrectPassword -> {
+                            Error.AuthError.LoginError.IncorrectPassword -> {
                                 Log.d("ab_do" , "IncorrectPassword")
 
                             }
-                            is Error.AuthError.UndefinedError -> {
+                            is Error.AuthError.LoginError.UndefinedLoginError -> {
                                 Log.d("ab_do" , "UndefinedError ${result.error.message}")
-                            }
-
-                            Error.AuthError.UserAlreadyExitsError -> {
-                                Log.d("ab_do" , "UserAlreadyExitsError")
                             }
                         }
                         loginState = loginState.copy(isLoading = false)

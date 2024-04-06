@@ -48,33 +48,28 @@ class RegisterViewModel @Inject constructor(
     private fun onRegisterClicked() {
         registerState = registerState.copy(isLoading = true)
         viewModelScope.launch {
-            when(val result = authManager.register(
+            when (val result = authManager.register(
                 registerState.name,
                 registerState.surname,
                 registerState.phoneNum,
                 registerState.email,
-                registerState.password)) {
+                registerState.password
+            )) {
                 is Result.Error -> {
-                    when(result.error) {
-                        Error.AuthError.IncorrectEmail -> {
-                            Log.d("ab_do" , "IncorrectEmail")
-                        }
-                        Error.AuthError.IncorrectPassword -> {
-                            Log.d("ab_do" , "IncorrectPassword")
-
-                        }
-                        is Error.AuthError.UndefinedError -> {
-                            Log.d("ab_do" , "UndefinedError ${result.error.message}")
+                    when (result.error) {
+                        is Error.AuthError.RegisterError.UndefinedRegisterError -> {
+                            Log.d("ab_do", "UndefinedError ${result.error.message}")
                         }
 
-                        Error.AuthError.UserAlreadyExitsError -> {
-                            Log.d("ab_do" , "UserAlreadyExitsError")
+                        Error.AuthError.RegisterError.UserAlreadyExitsError -> {
+                            Log.d("ab_do", "UserAlreadyExitsError")
                         }
                     }
                     registerState = registerState.copy(isLoading = false)
                 }
+
                 is Result.Success -> {
-                    Log.d("ab_do" , "Success ${result.data?.id}")
+                    Log.d("ab_do", "Success ${result.data?.id}")
                     registerState = registerState.copy(isLoading = false)
                 }
             }

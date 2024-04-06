@@ -1,10 +1,18 @@
 package com.beapps.thedoctorapp.core.domain
 
 sealed interface Error {
-    sealed class AuthError : Error {
-        data object IncorrectEmail : AuthError()
-        data object IncorrectPassword : AuthError()
-        data object UserAlreadyExitsError : AuthError()
-        data class UndefinedError (val message: String) : AuthError()
+    sealed interface AuthError : Error {
+
+        sealed interface LoginError : AuthError {
+            data object IncorrectEmail : LoginError
+            data object IncorrectPassword : LoginError
+            data class UndefinedLoginError (val message: String) : LoginError
+        }
+
+        sealed interface RegisterError : AuthError {
+            data object UserAlreadyExitsError : RegisterError
+            data class UndefinedRegisterError (val message: String) : RegisterError
+        }
+
     }
 }
