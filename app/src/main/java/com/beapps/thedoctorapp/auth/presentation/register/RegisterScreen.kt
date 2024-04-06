@@ -50,18 +50,18 @@ private fun RegisterScreen(
             }
         }
 
-        CustomTextField(value = registerState.email, label = { Text(text = "Enter Name") }) {
+        CustomTextField(value = registerState.name, label = { Text(text = "Enter Name") }) {
             onEvent(RegisterScreenEvents.NameChanged(it))
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomTextField(value = registerState.password, label = { Text(text = "Enter Surname") }) {
+        CustomTextField(value = registerState.surname, label = { Text(text = "Enter Surname") }) {
             onEvent(RegisterScreenEvents.SurnameChanged(it))
         }
         Spacer(modifier = Modifier.height(16.dp))
 
         CustomTextField(
-            value = registerState.password,
+            value = registerState.phoneNum,
             label = { Text(text = "Enter Phone No.") }) {
             onEvent(RegisterScreenEvents.PhoneNumChanged(it))
         }
