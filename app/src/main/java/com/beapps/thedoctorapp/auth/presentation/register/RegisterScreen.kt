@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.auth.presentation.login
+package com.beapps.thedoctorapp.auth.presentation.register
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,15 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenEvents
 import com.beapps.thedoctorapp.core.presentation.Screen
 import com.beapps.thedoctorapp.core.presentation.components.CustomTextField
 
 
 @Composable
-private fun LoginScreen(
+private fun RegisterScreen(
     navController: NavController,
-    loginState: LoginState,
-    onEvent: (LoginScreenEvents) -> Unit
+    registerState: RegisterState,
+    onEvent: (RegisterScreenEvents) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -44,48 +44,66 @@ private fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        LaunchedEffect(loginState.goToRegister) {
-            if (loginState.goToRegister) {
-                navController.navigate(Screen.RegisterScreen.route)
-                loginState.goToRegister = false
+        LaunchedEffect(registerState.goToLogin) {
+            if (registerState.goToLogin) {
+                navController.popBackStack()
             }
         }
 
-        CustomTextField(value = loginState.email, label = { Text(text = "Email") }) {
-            onEvent(LoginScreenEvents.EmailChanged(it))
+        CustomTextField(value = registerState.email, label = { Text(text = "Enter Name") }) {
+            onEvent(RegisterScreenEvents.NameChanged(it))
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomTextField(value = loginState.password, label = { Text(text = "Password") }) {
-            onEvent(LoginScreenEvents.PasswordChanged(it))
+        CustomTextField(value = registerState.password, label = { Text(text = "Enter Surname") }) {
+            onEvent(RegisterScreenEvents.SurnameChanged(it))
         }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        CustomTextField(
+            value = registerState.password,
+            label = { Text(text = "Enter Phone No.") }) {
+            onEvent(RegisterScreenEvents.PhoneNumChanged(it))
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        CustomTextField(value = registerState.email, label = { Text(text = "Enter Email") }) {
+            onEvent(RegisterScreenEvents.EmailChanged(it))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        CustomTextField(value = registerState.password, label = { Text(text = "Enter Password") }) {
+            onEvent(RegisterScreenEvents.PasswordChanged(it))
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(onClick = { onEvent(LoginScreenEvents.LoginClicked) }) {
-            Text(text = "Login")
+        Button(onClick = { onEvent(RegisterScreenEvents.RegisterClicked) }) {
+            Text(text = "Register")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "You don`t have an Account ? , Register Now",
+            text = "You already have an Account ? , Login Now",
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             color = Color.Blue,
-            modifier = Modifier.clickable { onEvent(LoginScreenEvents.RegisterClicked) }
+            modifier = Modifier.clickable { onEvent(RegisterScreenEvents.LoginClicked) }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (loginState.isLoading) {
+        if (registerState.isLoading) {
             CircularProgressIndicator()
         }
     }
 }
 
 @Composable
-fun LoginScreenRoot(navController: NavController) {
-    val viewModel = hiltViewModel<LoginViewModel>()
-    LoginScreen(navController, loginState = viewModel.loginState, viewModel::onEvent)
+fun RegisterScreenRoot(navController: NavController) {
+    val viewModel = hiltViewModel<RegisterViewModel>()
+    RegisterScreen(navController, registerState = viewModel.registerState, viewModel::onEvent)
 }

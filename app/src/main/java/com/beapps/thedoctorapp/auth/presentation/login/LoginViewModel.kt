@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor (
     }
 
     private fun onRegisterBtnClicked() {
-        loginState = loginState.copy(goToRegister = true)
+        loginState = loginState.copy(goToRegister = true , isLoading = false)
     }
 
 

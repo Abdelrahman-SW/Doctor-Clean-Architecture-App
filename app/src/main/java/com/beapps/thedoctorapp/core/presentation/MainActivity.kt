@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenRoot
 import com.beapps.thedoctorapp.auth.presentation.login.LoginViewModel
+import com.beapps.thedoctorapp.auth.presentation.register.RegisterScreenRoot
 import com.beapps.thedoctorapp.ui.theme.TheDoctorAppTheme
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +42,8 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.LoginScreen.route) {
                             LoginScreenRoot(navController)
                         }
-                        composable(Screen.RegisterScreen.route) {
-
+                        composable(Screen.RegisterScreen.route)  {
+                            RegisterScreenRoot(navController)
                         }
                         composable(Screen.HomeScreen.route) {
 

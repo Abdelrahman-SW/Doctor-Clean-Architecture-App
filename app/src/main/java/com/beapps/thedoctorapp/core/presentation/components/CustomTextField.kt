@@ -8,15 +8,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CustomTextField(value: String, isError: Boolean = false, label: @Composable () -> Unit, supportingText: @Composable() (() -> Unit)? = null, onValueChange: (String) -> Unit) {
+fun CustomTextField(modifier: Modifier = Modifier , value: String, isError: Boolean = false, label: @Composable () -> Unit, supportingText: @Composable() (() -> Unit)? = null, onValueChange: (String) -> Unit) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = label,
         isError = isError,
         supportingText = supportingText,
-        modifier = Modifier.
-        clip(RoundedCornerShape(8.dp)
-        )
+        modifier = modifier,
+        shape = RoundedCornerShape(8.dp)
     )
 }
