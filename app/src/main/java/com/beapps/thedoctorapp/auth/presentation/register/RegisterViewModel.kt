@@ -46,9 +46,9 @@ class RegisterViewModel @Inject constructor(
 
 
     private fun onRegisterClicked() {
-        registerState = registerState.copy(isLoading = true)
+        registerState = registerState.copy(screenStatue = RegisterScreenStatue.Loading)
         viewModelScope.launch {
-            when (val result = authManager.register(
+            registerState = when (val result = authManager.register(
                 registerState.name,
                 registerState.surname,
                 registerState.phoneNum,
@@ -56,28 +56,18 @@ class RegisterViewModel @Inject constructor(
                 registerState.password
             )) {
                 is Result.Error -> {
-                    when (result.error) {
-                        is Error.AuthError.RegisterError.UndefinedRegisterError -> {
-                            Log.d("ab_do", "UndefinedError ${result.error.message}")
-                        }
-
-                        Error.AuthError.RegisterError.UserAlreadyExitsError -> {
-                            Log.d("ab_do", "UserAlreadyExitsError")
-                        }
-                    }
-                    registerState = registerState.copy(isLoading = false)
+                    registerState.copy(screenStatue = RegisterScreenStatue.Error(result.error))
                 }
 
                 is Result.Success -> {
-                    Log.d("ab_do", "Success ${result.data?.id}")
-                    registerState = registerState.copy(isLoading = false)
+                    registerState.copy(screenStatue = RegisterScreenStatue.Success(result.data))
                 }
             }
         }
     }
 
     private fun onLoginClicked() {
-        registerState = registerState.copy(goToLogin = true, isLoading = false)
+        registerState = registerState.copy(goToLogin = true, screenStatue = RegisterScreenStatue.Idle)
     }
 
 

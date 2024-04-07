@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -19,6 +20,8 @@ import androidx.navigation.compose.rememberNavController
 import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenRoot
 import com.beapps.thedoctorapp.auth.presentation.login.LoginViewModel
 import com.beapps.thedoctorapp.auth.presentation.register.RegisterScreenRoot
+import com.beapps.thedoctorapp.core.domain.Util
+import com.beapps.thedoctorapp.home.presentation.HomeScreen
 import com.beapps.thedoctorapp.ui.theme.TheDoctorAppTheme
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,9 +38,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
+                    val context = LocalContext.current
+
                     val startDestination = remember {
-                        if (Util.isUserLoggedIn()) Screen.HomeScreen.route else Screen.LoginScreen.route
+                        val currentLoggedInDoctor = Util.getCurrentLoggedInDoctor(context)
+                        if(currentLoggedInDoctor == null) Screen.LoginScreen.route
+                        else Screen.HomeScreen.route
                     }
+                    
                     NavHost(navController = navController, startDestination = startDestination) {
                         composable(Screen.LoginScreen.route) {
                             LoginScreenRoot(navController)
@@ -46,7 +54,9 @@ class MainActivity : ComponentActivity() {
                             RegisterScreenRoot(navController)
                         }
                         composable(Screen.HomeScreen.route) {
-
+                             Util.getCurrentLoggedInDoctor(context)?.let { doctor ->
+                                 HomeScreen(navController , doctor = doctor)
+                             }
                         }
                     }
                 }

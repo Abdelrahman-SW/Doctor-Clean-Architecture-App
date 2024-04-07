@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp.auth.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenEvents
+import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenStatue
+import com.beapps.thedoctorapp.core.domain.Error
+import com.beapps.thedoctorapp.core.domain.Util
 import com.beapps.thedoctorapp.core.presentation.Screen
 import com.beapps.thedoctorapp.core.presentation.components.CustomTextField
 
@@ -43,6 +52,37 @@ private fun RegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        val context = LocalContext.current
+
+        var isLoading by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        LaunchedEffect(registerState.screenStatue) {
+            when(val statue = registerState.screenStatue) {
+                is RegisterScreenStatue.Error -> {
+                    isLoading = false
+                    val message = when(statue.error) {
+                        Error.AuthError.RegisterError.UserAlreadyExitsError -> "There is Already An Account With this Email , Try to Log-in instead"
+                        is Error.AuthError.RegisterError.UndefinedRegisterError -> {
+                            statue.error.message
+                        }
+                    }
+                    Toast.makeText(context , message , Toast.LENGTH_LONG).show()
+                }
+                RegisterScreenStatue.Loading -> {
+                    isLoading = true
+                }
+               is RegisterScreenStatue.Success -> {
+                    Util.saveDoctorCredentials(context , statue.data!!)
+                    isLoading = false
+                    navController.popBackStack()
+                    navController.navigate(Screen.HomeScreen.route)
+                }
+                RegisterScreenStatue.Idle -> isLoading = false
+            }
+        }
 
         LaunchedEffect(registerState.goToLogin) {
             if (registerState.goToLogin) {
@@ -94,9 +134,8 @@ private fun RegisterScreen(
             modifier = Modifier.clickable { onEvent(RegisterScreenEvents.LoginClicked) }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (registerState.isLoading) {
+        if (isLoading) {
+            Spacer(modifier = Modifier.height(16.dp))
             CircularProgressIndicator()
         }
     }

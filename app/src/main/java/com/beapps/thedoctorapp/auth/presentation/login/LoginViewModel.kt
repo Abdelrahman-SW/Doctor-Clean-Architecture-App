@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.auth.domain.AuthManager
-import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,29 +30,17 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onLoginClicked() {
-        loginState = loginState.copy(isLoading = true)
+        loginState = loginState.copy(screenStatue = LoginScreenStatue.Loading)
         viewModelScope.launch {
             authManager.login(loginState.email, loginState.password).collect {
                 result->
-                when(result) {
+                loginState = when(result) {
                     is Result.Error -> {
-                        when(result.error) {
-                            Error.AuthError.LoginError.IncorrectEmail -> {
-                                Log.d("ab_do" , "IncorrectEmail")
-                            }
-                            Error.AuthError.LoginError.IncorrectPassword -> {
-                                Log.d("ab_do" , "IncorrectPassword")
-
-                            }
-                            is Error.AuthError.LoginError.UndefinedLoginError -> {
-                                Log.d("ab_do" , "UndefinedError ${result.error.message}")
-                            }
-                        }
-                        loginState = loginState.copy(isLoading = false)
+                        loginState.copy(screenStatue = LoginScreenStatue.Error(result.error))
                     }
+
                     is Result.Success -> {
-                        Log.d("ab_do" , "Success ${result.data?.id}")
-                        loginState = loginState.copy(isLoading = false)
+                        loginState.copy(screenStatue = LoginScreenStatue.Success(result.data))
                     }
                 }
             }
@@ -61,7 +48,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onRegisterBtnClicked() {
-        loginState = loginState.copy(goToRegister = true, isLoading = false)
+        loginState = loginState.copy(goToRegister = true, screenStatue = LoginScreenStatue.Idle)
     }
 
 
