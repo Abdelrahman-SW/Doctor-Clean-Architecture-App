@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.auth.mappers
+package com.beapps.thedoctorapp.auth.data.mappers
 
 import com.beapps.thedoctorapp.auth.data.dto.DoctorDto
 import com.beapps.thedoctorapp.auth.domain.Doctor

@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.di
+package com.beapps.thedoctorapp.core.di
 
 import android.content.Context
 import com.beapps.thedoctorapp.auth.data.remote.firebase.FirebaseAuthManager
@@ -14,13 +14,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object AuthModule {
-    @Provides
-    @Singleton
-    fun provideAuthManager() : AuthManager {
-        return FirebaseAuthManager()
-    }
-
+object CoreModule {
     @Provides
     @Singleton
     fun provideCredentialsManager(@ApplicationContext context : Context) : AuthCredentialsManager {

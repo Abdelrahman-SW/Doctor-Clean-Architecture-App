@@ -38,13 +38,12 @@ class LoginViewModel @Inject constructor(
                 result->
                 loginState = when(result) {
                     is Result.Error -> {
-                        loginState = loginState.copy(isLoading = false)
-                        loginState.copy(screenState = LoginScreenState.Error(result.error))
+                        loginState.copy(isLoading = false , screenState = LoginScreenState.Error(result.error))
                     }
 
                     is Result.Success -> {
-                        loginState = loginState.copy(isLoading = false)
-                        loginState.copy(screenState = LoginScreenState.Success(result.data))
+                        saveDoctorCredentials(result.data)
+                        loginState.copy(isLoading = false , screenState = LoginScreenState.Success(result.data))
                     }
                 }
             }
@@ -70,7 +69,6 @@ class LoginViewModel @Inject constructor(
             is LoginScreenEvents.PasswordChanged -> onPasswordChanged(event.value)
             is LoginScreenEvents.LoginClicked -> onLoginClicked()
             LoginScreenEvents.RegisterClicked -> onRegisterBtnClicked()
-            is LoginScreenEvents.OnSuccessLogin -> saveDoctorCredentials(event.doctor)
             LoginScreenEvents.OnDispose -> onDispose()
         }
     }
@@ -85,8 +83,6 @@ sealed interface LoginScreenEvents {
     data object OnDispose : LoginScreenEvents
 
     data object RegisterClicked : LoginScreenEvents
-    data class OnSuccessLogin(val doctor : Doctor) : LoginScreenEvents
-
 
 
 }

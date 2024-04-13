@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
     private val currentDoctor by lazy {
         mainViewModel.getCurrentLoggedInDoctor()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -39,27 +40,25 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-
                     val startDestination = remember {
                         mainViewModel.getTheCurrentRoute()
                     }
-
-
                     NavHost(navController = navController, startDestination = startDestination) {
                         composable(Screen.LoginScreen.route) {
                             LoginScreenRoot(navController)
                         }
-                        composable(Screen.RegisterScreen.route)  {
+                        composable(Screen.RegisterScreen.route) {
                             RegisterScreenRoot(navController)
                         }
                         composable(Screen.HomeScreen.route) {
-                            currentDoctor?.let {
-                                 doctor ->
-                                 HomeScreenRoot(navController , doctor = doctor)
-                             }
+                            currentDoctor?.let { doctor ->
+                                HomeScreenRoot(navController, doctor = doctor)
+                            }
                         }
                         composable(Screen.ProfileScreen.route) {
-                            ProfileScreenRoot(doctor = currentDoctor ?: Doctor())
+                            currentDoctor?.let { doctor ->
+                                ProfileScreenRoot(doctor = doctor)
+                            }
                         }
                     }
                 }

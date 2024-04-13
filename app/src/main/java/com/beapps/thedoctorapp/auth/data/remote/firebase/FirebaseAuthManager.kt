@@ -3,11 +3,12 @@ package com.beapps.thedoctorapp.auth.data.remote.firebase
 import com.beapps.thedoctorapp.auth.data.dto.DoctorDto
 import com.beapps.thedoctorapp.auth.domain.AuthManager
 import com.beapps.thedoctorapp.auth.domain.Doctor
-import com.beapps.thedoctorapp.auth.mappers.toDoctor
-import com.beapps.thedoctorapp.auth.mappers.toDoctorDto
+import com.beapps.thedoctorapp.auth.data.mappers.toDoctor
+import com.beapps.thedoctorapp.auth.data.mappers.toDoctorDto
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -52,7 +53,8 @@ class FirebaseAuthManager : AuthManager {
 
                 emit(Result.Error(Error.AuthError.LoginError.IncorrectPassword))
 
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 emit(Result.Error(Error.AuthError.LoginError.UndefinedLoginError(e.message ?: "Unknown Error")))
             }
         }
@@ -62,7 +64,7 @@ class FirebaseAuthManager : AuthManager {
         doctor: Doctor
     ): Result<Doctor, Error.AuthError.RegisterError> {
         val doctorDto = doctor.toDoctorDto()
-        if (ifUserAlreadyExits(doctor.email)) return Result.Error(Error.AuthError.RegisterError.UserAlreadyExitsError)
+        if (ifUserAlreadyExits(doctorDto.email)) return Result.Error(Error.AuthError.RegisterError.UserAlreadyExitsError)
         return try {
             val result = db.collection(collectionName)
                 .add(doctorDto)

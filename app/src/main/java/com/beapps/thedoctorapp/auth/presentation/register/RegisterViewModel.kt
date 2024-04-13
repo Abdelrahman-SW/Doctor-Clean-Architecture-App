@@ -62,13 +62,12 @@ class RegisterViewModel @Inject constructor(
 
             )) {
                 is Result.Error -> {
-                    registerState = registerState.copy(isLoading = false)
-                    registerState.copy(screenState = RegisterScreenState.Error(result.error))
+                    registerState.copy(isLoading = false , screenState = RegisterScreenState.Error(result.error))
                 }
 
                 is Result.Success -> {
-                    registerState = registerState.copy(isLoading = false)
-                    registerState.copy(screenState = RegisterScreenState.Success(result.data))
+                    saveDoctorCredentials(result.data)
+                    registerState.copy(isLoading = false , screenState = RegisterScreenState.Success(result.data))
                 }
             }
         }
@@ -96,7 +95,6 @@ class RegisterViewModel @Inject constructor(
             is RegisterScreenEvents.NameChanged -> onNameChanged(event.value)
             is RegisterScreenEvents.PhoneNumChanged -> onPhoneNumChanged(event.value)
             is RegisterScreenEvents.SurnameChanged -> onSurnameChanged(event.value)
-            is RegisterScreenEvents.OnSuccessRegistration -> saveDoctorCredentials(event.doctor)
             RegisterScreenEvents.OnDispose -> onDispose()
         }
     }
@@ -115,5 +113,4 @@ sealed interface RegisterScreenEvents {
     data object RegisterClicked : RegisterScreenEvents
     data object OnDispose : RegisterScreenEvents
 
-    data class OnSuccessRegistration(val doctor : Doctor) : RegisterScreenEvents
 }

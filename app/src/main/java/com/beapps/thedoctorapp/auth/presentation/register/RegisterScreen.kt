@@ -62,7 +62,6 @@ private fun RegisterScreen(
                     Toast.makeText(context , message , Toast.LENGTH_LONG).show()
                 }
                is RegisterScreenState.Success -> {
-                    onEvent(RegisterScreenEvents.OnSuccessRegistration(statue.data))
                     navController.popBackStack(Screen.LoginScreen.route , true)
                     navController.navigate(Screen.HomeScreen.route)
                 }
@@ -122,8 +121,10 @@ private fun RegisterScreen(
             modifier = Modifier.clickable { onEvent(RegisterScreenEvents.LoginClicked) }
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+
         if (registerState.isLoading) {
-            Spacer(modifier = Modifier.height(16.dp))
             CircularProgressIndicator()
         }
     }
