@@ -60,6 +60,10 @@ class LoginViewModel @Inject constructor(
         credentialsManager.saveDoctorCredentials(doctor)
     }
 
+    private fun onDispose() {
+        loginState = loginState.copy(screenState = LoginScreenState.Idle)
+    }
+
     fun onEvent(event: LoginScreenEvents) {
         when (event) {
             is LoginScreenEvents.EmailChanged -> onEmailChanged(event.value)
@@ -67,6 +71,7 @@ class LoginViewModel @Inject constructor(
             is LoginScreenEvents.LoginClicked -> onLoginClicked()
             LoginScreenEvents.RegisterClicked -> onRegisterBtnClicked()
             is LoginScreenEvents.OnSuccessLogin -> saveDoctorCredentials(event.doctor)
+            LoginScreenEvents.OnDispose -> onDispose()
         }
     }
 
@@ -77,7 +82,11 @@ sealed interface LoginScreenEvents {
     data class PasswordChanged(val value: String) : LoginScreenEvents
     data object LoginClicked : LoginScreenEvents
 
+    data object OnDispose : LoginScreenEvents
+
     data object RegisterClicked : LoginScreenEvents
     data class OnSuccessLogin(val doctor : Doctor) : LoginScreenEvents
+
+
 
 }

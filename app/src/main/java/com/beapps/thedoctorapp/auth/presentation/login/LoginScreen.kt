@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +52,7 @@ private fun LoginScreen(
 
         val context = LocalContext.current
 
-        LaunchedEffect(loginState.screenState) {
+        DisposableEffect(loginState.screenState) {
             when(val statue = loginState.screenState) {
                 is LoginScreenState.Error -> {
                     val message = when(statue.error) {
@@ -65,11 +66,17 @@ private fun LoginScreen(
                 }
                 is LoginScreenState.Success -> {
                     onEvent(LoginScreenEvents.OnSuccessLogin(statue.data))
-                    navController.popBackStack()
+                    navController.popBackStack(Screen.LoginScreen.route , true)
                     navController.navigate(Screen.HomeScreen.route)
                 }
-                LoginScreenState.GoToRegister -> navController.navigate(Screen.RegisterScreen.route)
+                LoginScreenState.GoToRegister -> {
+                    navController.navigate(Screen.RegisterScreen.route)
+                }
                 LoginScreenState.Idle -> Unit
+            }
+
+            onDispose {
+                onEvent(LoginScreenEvents.OnDispose)
             }
         }
 

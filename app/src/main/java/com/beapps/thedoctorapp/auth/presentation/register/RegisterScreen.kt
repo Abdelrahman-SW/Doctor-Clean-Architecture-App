@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenEvents
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.presentation.Screen
 import com.beapps.thedoctorapp.core.presentation.components.CustomTextField
@@ -48,7 +50,7 @@ private fun RegisterScreen(
         val context = LocalContext.current
         
 
-        LaunchedEffect(registerState.screenState) {
+        DisposableEffect(registerState.screenState) {
             when(val statue = registerState.screenState) {
                 is RegisterScreenState.Error -> {
                     val message = when(statue.error) {
@@ -61,15 +63,17 @@ private fun RegisterScreen(
                 }
                is RegisterScreenState.Success -> {
                     onEvent(RegisterScreenEvents.OnSuccessRegistration(statue.data))
-                    navController.popBackStack()
+                    navController.popBackStack(Screen.LoginScreen.route , true)
                     navController.navigate(Screen.HomeScreen.route)
                 }
                 RegisterScreenState.GoToLogin -> {
                     navController.popBackStack()
-                    navController.navigate(Screen.LoginScreen.route)
                 }
 
                 RegisterScreenState.Idle -> Unit
+            }
+            onDispose {
+                onEvent(RegisterScreenEvents.OnDispose)
             }
         }
         

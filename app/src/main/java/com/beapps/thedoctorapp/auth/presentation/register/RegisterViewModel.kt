@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.auth.domain.AuthManager
 import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenEvents
+import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenState
 import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -80,6 +82,10 @@ class RegisterViewModel @Inject constructor(
         credentialsManager.saveDoctorCredentials(doctor)
     }
 
+    private fun onDispose() {
+        registerState = registerState.copy(screenState = RegisterScreenState.Idle)
+    }
+
 
     fun onEvent(event: RegisterScreenEvents) {
         when (event) {
@@ -91,7 +97,7 @@ class RegisterViewModel @Inject constructor(
             is RegisterScreenEvents.PhoneNumChanged -> onPhoneNumChanged(event.value)
             is RegisterScreenEvents.SurnameChanged -> onSurnameChanged(event.value)
             is RegisterScreenEvents.OnSuccessRegistration -> saveDoctorCredentials(event.doctor)
-
+            RegisterScreenEvents.OnDispose -> onDispose()
         }
     }
 
@@ -107,5 +113,7 @@ sealed interface RegisterScreenEvents {
     data class PhoneNumChanged(val value: String) : RegisterScreenEvents
     data object LoginClicked : RegisterScreenEvents
     data object RegisterClicked : RegisterScreenEvents
+    data object OnDispose : RegisterScreenEvents
+
     data class OnSuccessRegistration(val doctor : Doctor) : RegisterScreenEvents
 }
