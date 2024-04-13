@@ -1,13 +1,13 @@
 package com.beapps.thedoctorapp.auth.presentation.register
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.auth.domain.AuthManager
-import com.beapps.thedoctorapp.core.domain.Error
+import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authManager: AuthManager
+    private val authManager: AuthManager,
+    private val credentialsManager: AuthCredentialsManager
 ) : ViewModel() {
 
     var registerState by mutableStateOf(RegisterState())
@@ -46,28 +47,37 @@ class RegisterViewModel @Inject constructor(
 
 
     private fun onRegisterClicked() {
-        registerState = registerState.copy(screenStatue = RegisterScreenStatue.Loading)
+        registerState = registerState.copy(isLoading = true , screenState = RegisterScreenState.Idle)
         viewModelScope.launch {
             registerState = when (val result = authManager.register(
-                registerState.name,
-                registerState.surname,
-                registerState.phoneNum,
-                registerState.email,
-                registerState.password
+                doctor = Doctor(
+                    name = registerState.name,
+                    surname = registerState.surname,
+                    phoneNum = registerState.phoneNum,
+                    email = registerState.email,
+                    password = registerState.password
+                )
+
             )) {
                 is Result.Error -> {
-                    registerState.copy(screenStatue = RegisterScreenStatue.Error(result.error))
+                    registerState = registerState.copy(isLoading = false)
+                    registerState.copy(screenState = RegisterScreenState.Error(result.error))
                 }
 
                 is Result.Success -> {
-                    registerState.copy(screenStatue = RegisterScreenStatue.Success(result.data))
+                    registerState = registerState.copy(isLoading = false)
+                    registerState.copy(screenState = RegisterScreenState.Success(result.data))
                 }
             }
         }
     }
 
     private fun onLoginClicked() {
-        registerState = registerState.copy(goToLogin = true, screenStatue = RegisterScreenStatue.Idle)
+        registerState = registerState.copy(isLoading = false , screenState = RegisterScreenState.GoToLogin)
+    }
+
+    private fun saveDoctorCredentials(doctor: Doctor) {
+        credentialsManager.saveDoctorCredentials(doctor)
     }
 
 
@@ -80,8 +90,12 @@ class RegisterViewModel @Inject constructor(
             is RegisterScreenEvents.NameChanged -> onNameChanged(event.value)
             is RegisterScreenEvents.PhoneNumChanged -> onPhoneNumChanged(event.value)
             is RegisterScreenEvents.SurnameChanged -> onSurnameChanged(event.value)
+            is RegisterScreenEvents.OnSuccessRegistration -> saveDoctorCredentials(event.doctor)
+
         }
     }
+
+
 
 }
 
@@ -93,4 +107,5 @@ sealed interface RegisterScreenEvents {
     data class PhoneNumChanged(val value: String) : RegisterScreenEvents
     data object LoginClicked : RegisterScreenEvents
     data object RegisterClicked : RegisterScreenEvents
+    data class OnSuccessRegistration(val doctor : Doctor) : RegisterScreenEvents
 }

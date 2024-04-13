@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp.core.domain
 
+
 sealed interface Error {
     sealed interface AuthError : Error {
 
@@ -13,6 +14,10 @@ sealed interface Error {
             data object UserAlreadyExitsError : RegisterError
             data class UndefinedRegisterError (val message: String) : RegisterError
         }
+
+    }
+
+    sealed interface GetDoctorContentErrors : Error{
 
     }
 }

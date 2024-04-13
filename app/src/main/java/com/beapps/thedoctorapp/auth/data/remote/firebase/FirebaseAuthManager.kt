@@ -1,10 +1,10 @@
-package com.beapps.thedoctorapp.auth.data.firebase
+package com.beapps.thedoctorapp.auth.data.remote.firebase
 
-import android.util.Log
 import com.beapps.thedoctorapp.auth.data.dto.DoctorDto
-import com.beapps.thedoctorapp.auth.data.dto.toDoctor
 import com.beapps.thedoctorapp.auth.domain.AuthManager
 import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.auth.mappers.toDoctor
+import com.beapps.thedoctorapp.auth.mappers.toDoctorDto
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.google.firebase.firestore.FirebaseFirestore
@@ -45,7 +45,7 @@ class FirebaseAuthManager : AuthManager {
                     val storedPassword = document.getString(PASSWORD_FIELD)
                     if (storedPassword != null && storedPassword == password) {
                         val doctor = document.toObject<DoctorDto>()
-                        emit(Result.Success(doctor?.toDoctor()?.copy(id = document.id)))
+                        emit(Result.Success(doctor?.toDoctor()?.copy(id = document.id) ?: DoctorDto().toDoctor()))
                         return@flow
                     }
                 }
@@ -59,25 +59,15 @@ class FirebaseAuthManager : AuthManager {
     }
 
     override suspend fun register(
-        name: String,
-        surname: String,
-        phoneNum: String,
-        email: String,
-        password: String
+        doctor: Doctor
     ): Result<Doctor, Error.AuthError.RegisterError> {
-        val doctor = DoctorDto(
-            name = name,
-            phoneNum = phoneNum,
-            email = email,
-            password = password,
-            surname = surname
-        )
-        if (ifUserAlreadyExits(email)) return Result.Error(Error.AuthError.RegisterError.UserAlreadyExitsError)
+        val doctorDto = doctor.toDoctorDto()
+        if (ifUserAlreadyExits(doctor.email)) return Result.Error(Error.AuthError.RegisterError.UserAlreadyExitsError)
         return try {
             val result = db.collection(collectionName)
-                .add(doctor)
+                .add(doctorDto)
                 .await()
-            val newDoctor = doctor.toDoctor().copy(id = result.id)
+            val newDoctor = doctorDto.toDoctor().copy(id = result.id)
             Result.Success(newDoctor)
         } catch (e: Exception) {
             Result.Error(Error.AuthError.RegisterError.UndefinedRegisterError(e.message ?: "Unknown Error"))

@@ -7,11 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface AuthManager {
     fun login (email : String , password : String) : Flow<Result<Doctor, Error.AuthError.LoginError>>
     suspend fun register (
-        name: String,
-        surname: String,
-        phoneNum: String,
-        email: String,
-        password: String
+        doctor: Doctor
     ): Result<Doctor , Error.AuthError.RegisterError>
 
     fun logout()

@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.home.presentation
+package com.beapps.thedoctorapp.content.presentation.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,14 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.beapps.thedoctorapp.auth.domain.Doctor
-import com.beapps.thedoctorapp.core.domain.Util
 import com.beapps.thedoctorapp.core.presentation.Screen
 
 
 @Composable
-fun HomeScreen(navController: NavController , doctor: Doctor) {
+fun ProfileScreen(
+    doctor: Doctor,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -29,15 +31,12 @@ fun HomeScreen(navController: NavController , doctor: Doctor) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Id = ${doctor.id}")
         Spacer(modifier = Modifier.height(32.dp))
-        val context = LocalContext.current
-        Button(onClick = {
-            Util.deleteDoctorCredentials(context)
-            navController.popBackStack()
-            navController.navigate(Screen.LoginScreen.route)
-        }) {
-            Text(text = "Logout")
-        }
-
     }
 
+}
+
+@Composable
+fun ProfileScreenRoot(doctor: Doctor) {
+//    val viewModel = hiltViewModel<HomeViewModel>()
+    ProfileScreen(doctor)
 }

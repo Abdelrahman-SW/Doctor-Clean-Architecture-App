@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp.auth.domain
 
+
 data class Doctor(
     val id: String = "",
     val name: String="",
@@ -8,3 +9,4 @@ data class Doctor(
     val email: String="",
     val password: String=""
 )
+

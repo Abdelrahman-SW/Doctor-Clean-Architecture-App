@@ -1,12 +1,13 @@
 package com.beapps.thedoctorapp.auth.presentation.login
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.auth.domain.AuthManager
+import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authManager: AuthManager
+    private val authManager: AuthManager,
+    private val credentialsManager: AuthCredentialsManager
 ) : ViewModel() {
 
     var loginState by mutableStateOf(LoginState())
@@ -30,17 +32,19 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onLoginClicked() {
-        loginState = loginState.copy(screenStatue = LoginScreenStatue.Loading)
+        loginState = loginState.copy(screenState = LoginScreenState.Idle , isLoading = true)
         viewModelScope.launch {
             authManager.login(loginState.email, loginState.password).collect {
                 result->
                 loginState = when(result) {
                     is Result.Error -> {
-                        loginState.copy(screenStatue = LoginScreenStatue.Error(result.error))
+                        loginState = loginState.copy(isLoading = false)
+                        loginState.copy(screenState = LoginScreenState.Error(result.error))
                     }
 
                     is Result.Success -> {
-                        loginState.copy(screenStatue = LoginScreenStatue.Success(result.data))
+                        loginState = loginState.copy(isLoading = false)
+                        loginState.copy(screenState = LoginScreenState.Success(result.data))
                     }
                 }
             }
@@ -48,9 +52,13 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onRegisterBtnClicked() {
-        loginState = loginState.copy(goToRegister = true, screenStatue = LoginScreenStatue.Idle)
+        loginState = loginState.copy(isLoading = false)
+        loginState = loginState.copy(screenState = LoginScreenState.GoToRegister)
     }
 
+    private fun saveDoctorCredentials(doctor: Doctor) {
+        credentialsManager.saveDoctorCredentials(doctor)
+    }
 
     fun onEvent(event: LoginScreenEvents) {
         when (event) {
@@ -58,6 +66,7 @@ class LoginViewModel @Inject constructor(
             is LoginScreenEvents.PasswordChanged -> onPasswordChanged(event.value)
             is LoginScreenEvents.LoginClicked -> onLoginClicked()
             LoginScreenEvents.RegisterClicked -> onRegisterBtnClicked()
+            is LoginScreenEvents.OnSuccessLogin -> saveDoctorCredentials(event.doctor)
         }
     }
 
@@ -69,4 +78,6 @@ sealed interface LoginScreenEvents {
     data object LoginClicked : LoginScreenEvents
 
     data object RegisterClicked : LoginScreenEvents
+    data class OnSuccessLogin(val doctor : Doctor) : LoginScreenEvents
+
 }
