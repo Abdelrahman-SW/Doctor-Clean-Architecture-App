@@ -15,11 +15,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,8 +53,8 @@ private fun LoginScreen(
                     val message = when(statue.error) {
                         Error.AuthError.LoginError.IncorrectEmail -> "The Email You Entered Is Not Correct"
                         Error.AuthError.LoginError.IncorrectPassword -> "The Password You Entered Is Not Correct"
-                        is Error.AuthError.LoginError.UndefinedLoginError -> {
-                            statue.error.message
+                        is Error.AuthError.LoginError.Others -> {
+                            statue.error.message ?: "UnKnown Error"
                         }
                     }
                     Toast.makeText(context, message , Toast.LENGTH_LONG).show()

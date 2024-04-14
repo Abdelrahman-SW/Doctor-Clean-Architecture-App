@@ -7,17 +7,20 @@ sealed interface Error {
         sealed interface LoginError : AuthError {
             data object IncorrectEmail : LoginError
             data object IncorrectPassword : LoginError
-            data class UndefinedLoginError (val message: String) : LoginError
+            data class Others (val message: String?) : LoginError
         }
 
         sealed interface RegisterError : AuthError {
             data object UserAlreadyExitsError : RegisterError
-            data class UndefinedRegisterError (val message: String) : RegisterError
+            data class Others (val message: String?) : RegisterError
         }
 
     }
 
-    sealed interface GetDoctorContentErrors : Error{
+    sealed interface GetContentErrors : Error{
+        data object EmptyContent : GetContentErrors
+
+        data class Others (val message: String?) : GetContentErrors
 
     }
 }

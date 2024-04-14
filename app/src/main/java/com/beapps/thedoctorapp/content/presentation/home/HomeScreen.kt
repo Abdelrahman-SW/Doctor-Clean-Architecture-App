@@ -21,7 +21,6 @@ import com.beapps.thedoctorapp.core.presentation.Screen
 @Composable
 fun HomeScreen(
     navController: NavController,
-    doctor: Doctor,
     onEvent: (HomeScreenEvents) -> Unit
 ) {
     Column(
@@ -58,7 +57,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeScreenRoot(navController: NavController, doctor: Doctor) {
+fun HomeScreenRoot(navController: NavController) {
     val viewModel = hiltViewModel<HomeViewModel>()
-    HomeScreen(navController, doctor, viewModel::onEvent)
+    HomeScreen(navController, viewModel::onEvent)
 }

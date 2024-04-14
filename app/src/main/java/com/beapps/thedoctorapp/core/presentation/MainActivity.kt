@@ -9,16 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.beapps.thedoctorapp.auth.domain.Doctor
 import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenRoot
 import com.beapps.thedoctorapp.auth.presentation.register.RegisterScreenRoot
-import com.beapps.thedoctorapp.content.presentation.home.HomeScreen
+import com.beapps.thedoctorapp.content.presentation.patientContent.PatientContentScreenRoot
 import com.beapps.thedoctorapp.content.presentation.home.HomeScreenRoot
-import com.beapps.thedoctorapp.content.presentation.profile.ProfileScreen
+import com.beapps.thedoctorapp.content.presentation.patients.PatientScreenRoot
 import com.beapps.thedoctorapp.content.presentation.profile.ProfileScreenRoot
 import com.beapps.thedoctorapp.ui.theme.TheDoctorAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,9 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
-    private val currentDoctor by lazy {
-        mainViewModel.getCurrentLoggedInDoctor()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +49,27 @@ class MainActivity : ComponentActivity() {
                             RegisterScreenRoot(navController)
                         }
                         composable(Screen.HomeScreen.route) {
-                            currentDoctor?.let { doctor ->
-                                HomeScreenRoot(navController, doctor = doctor)
-                            }
+                            HomeScreenRoot(navController)
                         }
                         composable(Screen.ProfileScreen.route) {
-                            currentDoctor?.let { doctor ->
-                                ProfileScreenRoot(doctor = doctor)
-                            }
+                            ProfileScreenRoot(mainViewModel.getCurrentLoggedInDoctor() ?: Doctor())
+                        }
+                        composable(Screen.PatientsScreen.route) {
+                            PatientScreenRoot(navController)
+                        }
+                        composable(Screen.PatientsContentsScreen.route + "/{patientFolderName}/{doctorId}",
+                            arguments = listOf(
+                                navArgument("patientFolderName") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("doctorId") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
+                            val patientId = it.arguments?.getString("patientFolderName") ?: ""
+                            val doctorId =  it.arguments?.getString("doctorId") ?: ""
+                            PatientContentScreenRoot(navController , patientId, doctorId)
                         }
                     }
                 }

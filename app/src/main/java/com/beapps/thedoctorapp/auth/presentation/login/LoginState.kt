@@ -11,7 +11,6 @@ data class LoginState(
 
 
 sealed interface LoginScreenState {
-
     data object Idle : LoginScreenState
     data object GoToRegister : LoginScreenState
     data class Success(val data: Doctor) : LoginScreenState

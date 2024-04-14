@@ -8,7 +8,6 @@ import com.beapps.thedoctorapp.auth.data.mappers.toDoctorDto
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -55,7 +54,7 @@ class FirebaseAuthManager : AuthManager {
 
             }
             catch (e: Exception) {
-                emit(Result.Error(Error.AuthError.LoginError.UndefinedLoginError(e.message ?: "Unknown Error")))
+                emit(Result.Error(Error.AuthError.LoginError.Others(e.message)))
             }
         }
     }
@@ -72,7 +71,7 @@ class FirebaseAuthManager : AuthManager {
             val newDoctor = doctorDto.toDoctor().copy(id = result.id)
             Result.Success(newDoctor)
         } catch (e: Exception) {
-            Result.Error(Error.AuthError.RegisterError.UndefinedRegisterError(e.message ?: "Unknown Error"))
+            Result.Error(Error.AuthError.RegisterError.Others(e.message))
         }
     }
 

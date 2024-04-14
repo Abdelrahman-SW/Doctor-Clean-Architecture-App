@@ -15,7 +15,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenEvents
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.presentation.Screen
 import com.beapps.thedoctorapp.core.presentation.components.CustomTextField
@@ -55,8 +53,8 @@ private fun RegisterScreen(
                 is RegisterScreenState.Error -> {
                     val message = when(statue.error) {
                         Error.AuthError.RegisterError.UserAlreadyExitsError -> "There is Already An Account With this Email , Try to Log-in instead"
-                        is Error.AuthError.RegisterError.UndefinedRegisterError -> {
-                            statue.error.message
+                        is Error.AuthError.RegisterError.Others -> {
+                            statue.error.message  ?: "UnKnown Error"
                         }
                     }
                     Toast.makeText(context , message , Toast.LENGTH_LONG).show()
