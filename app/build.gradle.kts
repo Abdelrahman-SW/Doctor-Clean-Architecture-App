@@ -4,7 +4,9 @@ plugins {
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.daggerHilt)
+    alias(libs.plugins.kotlinParacelize)
     kotlin("kapt")
+
 }
 
 android {
@@ -80,6 +82,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.hilt.android)
+    // gson
+    implementation (libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

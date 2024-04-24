@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.1"
+gson = "2.10.1"
 hiltAndroidCompiler = "2.48"
 dagger-hilt = "2.48"
 hiltNavigationComposeVersion = "1.2.0"
@@ -15,9 +16,11 @@ firebasBom = "32.8.0"
 googleServices = "4.4.1"
 firebaseCrashlyticsGradle = "2.9.9"
 navigationCompose = "2.7.7"
+kp = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
@@ -44,9 +47,9 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 
 
 [plugins]
+kotlinParacelize = {id = "org.jetbrains.kotlin.plugin.parcelize" , version.ref = "kp"}
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
 daggerHilt = {id = "com.google.dagger.hilt.android" , version.ref = "dagger-hilt"}
-

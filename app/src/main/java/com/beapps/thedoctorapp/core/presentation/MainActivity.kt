@@ -17,10 +17,12 @@ import androidx.navigation.navArgument
 import com.beapps.thedoctorapp.auth.domain.Doctor
 import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenRoot
 import com.beapps.thedoctorapp.auth.presentation.register.RegisterScreenRoot
+import com.beapps.thedoctorapp.content.domain.models.PatientContent
 import com.beapps.thedoctorapp.content.presentation.patientContent.PatientContentScreenRoot
 import com.beapps.thedoctorapp.content.presentation.home.HomeScreenRoot
 import com.beapps.thedoctorapp.content.presentation.patients.PatientScreenRoot
 import com.beapps.thedoctorapp.content.presentation.profile.ProfileScreenRoot
+import com.beapps.thedoctorapp.multimedia.presentation.MediaScreen
 import com.beapps.thedoctorapp.ui.theme.TheDoctorAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,9 +70,16 @@ class MainActivity : ComponentActivity() {
                             )
                         ) {
                             val patientId = it.arguments?.getString("patientFolderName") ?: ""
-                            val doctorId =  it.arguments?.getString("doctorId") ?: ""
-                            PatientContentScreenRoot(navController , patientId, doctorId)
+                            val doctorId = it.arguments?.getString("doctorId") ?: ""
+                            PatientContentScreenRoot(navController, patientId, doctorId)
                         }
+                        composable(
+                            Screen.MultiMediaScreen.route
+                        ) {
+                            val patientContent = navController.previousBackStackEntry?.savedStateHandle?.get<PatientContent>("patientContent")
+                            MediaScreen(patientContent = patientContent, navController)
+                        }
+
                     }
                 }
             }

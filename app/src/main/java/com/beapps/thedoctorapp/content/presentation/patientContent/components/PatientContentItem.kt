@@ -14,7 +14,7 @@ fun PatientContentItem(
     onClick: (patientContent: PatientContent) -> Unit
 ) {
     Text(
-        text = "${patientContent.path}%%${patientContent.name} %%${patientContent.mimeType.type}%%${patientContent.sizeBytes}%%${patientContent.updatedTimeMillis}",
+        text = "${patientContent.path}%%${patientContent.name} %%${patientContent.mimeType}%%${patientContent.sizeBytes}%%${patientContent.updatedTimeMillis}",
         modifier = modifier.clickable { onClick(patientContent) }
     )
 }

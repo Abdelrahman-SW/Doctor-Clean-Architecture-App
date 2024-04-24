@@ -1,11 +1,13 @@
 package com.beapps.thedoctorapp.content.domain.models
 
-import com.beapps.thedoctorapp.content.domain.MimeTypes
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class PatientContent(
     val path: String ,
     val name: String = "",
     val sizeBytes: Long,
-    val mimeType: MimeTypes,
+    val mimeType: String?,
     val updatedTimeMillis: Long
-)
+) : Parcelable

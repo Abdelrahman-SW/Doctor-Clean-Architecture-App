@@ -23,4 +23,11 @@ sealed interface Error {
         data class Others (val message: String?) : GetContentErrors
 
     }
+
+    sealed interface DownloadMediaErrors : Error{
+        data object EmptyContent : DownloadMediaErrors
+
+        data class Others (val message: String?) : DownloadMediaErrors
+
+    }
 }
