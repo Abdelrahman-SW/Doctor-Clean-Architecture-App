@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +46,7 @@ fun PatientContentScreen(
             )
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier.fillMaxSize() , horizontalAlignment = Alignment.CenterHorizontally) {
             items(screenState.patientsContent) { patientContent ->
                 PatientContentItem(patientContent = patientContent, onClick = {
                     navController.currentBackStackEntry?.savedStateHandle?.set(
@@ -54,7 +55,7 @@ fun PatientContentScreen(
                     )
                     navController.navigate(Screen.MultiMediaScreen.route)
                 })
-                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider()
             }
         }
 
