@@ -1,10 +1,9 @@
-package com.beapps.thedoctorapp.multimedia.data
+package com.beapps.thedoctorapp.multimedia.data.firebase
 
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.beapps.thedoctorapp.multimedia.domain.MediaDownloaderManager
-import com.beapps.thedoctorapp.multimedia.domain.MediaType
-import com.beapps.thedoctorapp.multimedia.domain.MimeTypes
+import com.beapps.thedoctorapp.multimedia.domain.models.MediaContent
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -19,20 +18,20 @@ class FirebaseMediaDownloader : MediaDownloaderManager {
 
     override suspend fun downloadMediaFile(
         path: String,
-        mimeTypes: MimeTypes
-    ): Result<MediaType, Error.DownloadMediaErrors> {
-        return when (mimeTypes) {
-            MimeTypes.Image -> downloadImage(path)
-            MimeTypes.Video -> downloadTextFile(path)
-            MimeTypes.Text -> downloadTextFile(path)
-            MimeTypes.Pdf -> downloadTextFile(path)
-            MimeTypes.OctetStream -> downloadTextFile(path)
-            MimeTypes.Undefined -> downloadTextFile(path)
-            MimeTypes.Others -> downloadTextFile(path)
+        mimeType: String?
+    ): Result<MediaContent, Error.DownloadMediaErrors> {
+        return when (mimeType.extractMimeType()) {
+            FirebaseMimeType.Image -> downloadImage(path)
+            FirebaseMimeType.Video -> downloadTextFile(path)
+            FirebaseMimeType.Text -> downloadTextFile(path)
+            FirebaseMimeType.Pdf -> downloadTextFile(path)
+            FirebaseMimeType.OctetStream -> downloadTextFile(path)
+            FirebaseMimeType.Undefined -> downloadTextFile(path)
+            FirebaseMimeType.Others -> downloadTextFile(path)
         }
     }
 
-    private suspend fun downloadTextFile(filePath: String): Result<MediaType, Error.DownloadMediaErrors> {
+    private suspend fun downloadTextFile(filePath: String): Result<MediaContent, Error.DownloadMediaErrors> {
         return withContext(Dispatchers.IO) {
             val taskSnapshot = storageRef.child(filePath).stream.await()
             try {
@@ -48,7 +47,7 @@ class FirebaseMediaDownloader : MediaDownloaderManager {
                 }
                 // Close the reader
                 reader.close()
-                Result.Success(data = MediaType.TextFile(stringBuilder.toString()))
+                Result.Success(data = MediaContent.TextFile(stringBuilder.toString()))
             } catch (e: Exception) {
                 e.printStackTrace()
                 Result.Error(Error.DownloadMediaErrors.Others(e.message))
@@ -56,11 +55,11 @@ class FirebaseMediaDownloader : MediaDownloaderManager {
         }
     }
 
-    private suspend fun downloadImage(filePath: String): Result<MediaType, Error.DownloadMediaErrors> {
+    private suspend fun downloadImage(filePath: String): Result<MediaContent, Error.DownloadMediaErrors> {
         return withContext(Dispatchers.IO) {
             try {
                 Result.Success(
-                    MediaType.Image(
+                    MediaContent.Image(
                         storageRef.child(filePath).getBytes(Long.MAX_VALUE).await()
                     )
                 )

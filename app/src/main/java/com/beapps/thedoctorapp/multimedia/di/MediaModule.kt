@@ -1,6 +1,6 @@
 package com.beapps.thedoctorapp.multimedia.di
 
-import com.beapps.thedoctorapp.multimedia.data.FirebaseMediaDownloader
+import com.beapps.thedoctorapp.multimedia.data.firebase.FirebaseMediaDownloader
 import com.beapps.thedoctorapp.multimedia.domain.MediaDownloaderManager
 import dagger.Module
 import dagger.Provides

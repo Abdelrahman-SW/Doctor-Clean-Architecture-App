@@ -1,6 +1,6 @@
-package com.beapps.thedoctorapp.multimedia.domain
+package com.beapps.thedoctorapp.multimedia.data.firebase
 
-enum class MimeTypes (val type : String) {
+enum class FirebaseMimeType (val type : String) {
     Image ("image") ,
     Video ("video") ,
     Text ("text") ,
