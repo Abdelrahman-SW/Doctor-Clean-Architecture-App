@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import com.beapps.thedoctorapp.content.domain.models.PatientContent
 import com.beapps.thedoctorapp.multimedia.presentation.components.ImageViewerScreen
 import com.beapps.thedoctorapp.multimedia.presentation.components.TextViewerScreen
+import com.beapps.thedoctorapp.multimedia.presentation.components.VideoViewerScreen
 
 @Composable
 fun MediaScreen(patientContent: PatientContent?, navController: NavHostController) {
@@ -63,7 +64,11 @@ fun MediaScreen(patientContent: PatientContent?, navController: NavHostControlle
             ImageViewerScreen(imageBitmap = imageBitmap)
         }
         is MediaState.TextState -> {
-            TextViewerScreen(state =  state)
+            TextViewerScreen(imageState =  state)
+        }
+
+        is MediaState.VideoState -> {
+            VideoViewerScreen(videoState = state , viewModel::onEvent)
         }
     }
 }

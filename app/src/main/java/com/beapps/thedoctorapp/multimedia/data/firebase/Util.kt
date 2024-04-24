@@ -7,8 +7,8 @@ fun String?.extractMimeType(): FirebaseMimeType {
         contains(FirebaseMimeType.Image.type) -> FirebaseMimeType.Image
         contains(FirebaseMimeType.Video.type) -> FirebaseMimeType.Video
         contains(FirebaseMimeType.Text.type) -> FirebaseMimeType.Text
-        contains(FirebaseMimeType.Pdf.type) -> FirebaseMimeType.Pdf
-        contains(FirebaseMimeType.OctetStream.type) -> FirebaseMimeType.OctetStream
+//        contains(FirebaseMimeType.Pdf.type) -> FirebaseMimeType.Pdf
+//        contains(FirebaseMimeType.OctetStream.type) -> FirebaseMimeType.OctetStream
         else -> FirebaseMimeType.Others
     }
 }

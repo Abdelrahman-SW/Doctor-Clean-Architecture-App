@@ -22,12 +22,28 @@ class FirebaseMediaDownloader : MediaDownloaderManager {
     ): Result<MediaContent, Error.DownloadMediaErrors> {
         return when (mimeType.extractMimeType()) {
             FirebaseMimeType.Image -> downloadImage(path)
-            FirebaseMimeType.Video -> downloadTextFile(path)
+            FirebaseMimeType.Video -> downloadVideo(path)
             FirebaseMimeType.Text -> downloadTextFile(path)
-            FirebaseMimeType.Pdf -> downloadTextFile(path)
-            FirebaseMimeType.OctetStream -> downloadTextFile(path)
-            FirebaseMimeType.Undefined -> downloadTextFile(path)
-            FirebaseMimeType.Others -> downloadTextFile(path)
+//            FirebaseMimeType.Pdf -> downloadTextFile(path)
+//            FirebaseMimeType.OctetStream -> downloadTextFile(path)
+            FirebaseMimeType.Undefined -> Result.Error(Error.DownloadMediaErrors.UnSupportedMedia)
+            FirebaseMimeType.Others -> Result.Error(Error.DownloadMediaErrors.UnSupportedMedia)
+        }
+    }
+
+    private suspend fun downloadVideo(path: String): Result<MediaContent, Error.DownloadMediaErrors> {
+        return withContext(Dispatchers.IO) {
+            try {
+                Result.Success(
+                    MediaContent.Video(
+                        storageRef.child(path).downloadUrl.await().toString()
+                    )
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Result.Error(Error.DownloadMediaErrors.Others(e.message))
+            }
+
         }
     }
 

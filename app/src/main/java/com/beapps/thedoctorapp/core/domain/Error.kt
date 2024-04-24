@@ -26,6 +26,7 @@ sealed interface Error {
 
     sealed interface DownloadMediaErrors : Error{
         data object EmptyContent : DownloadMediaErrors
+        data object UnSupportedMedia : DownloadMediaErrors
 
         data class Others (val message: String?) : DownloadMediaErrors
 

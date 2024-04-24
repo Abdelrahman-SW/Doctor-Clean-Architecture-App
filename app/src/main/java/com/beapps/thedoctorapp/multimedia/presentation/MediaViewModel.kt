@@ -1,10 +1,14 @@
 package com.beapps.thedoctorapp.multimedia.presentation
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.beapps.thedoctorapp.multimedia.domain.MediaDownloaderManager
@@ -15,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MediaViewModel @Inject constructor(
-    private val mediaDownloaderManager: MediaDownloaderManager
+    private val mediaDownloaderManager: MediaDownloaderManager,
+    private val player: Player
 ) : ViewModel() {
     var mediaScreenState by mutableStateOf(MediaScreenState())
         private set
@@ -33,6 +38,10 @@ class MediaViewModel @Inject constructor(
                         is Error.DownloadMediaErrors.Others -> {
                             mediaScreenState.copy(isLoading = false , error = result.error.message ?: "UnKnown Error")
                         }
+
+                        Error.DownloadMediaErrors.UnSupportedMedia -> {
+                            mediaScreenState.copy(isLoading = false , error = "This Media File Is Not Supported !")
+                        }
                     }
 
                 }
@@ -45,6 +54,10 @@ class MediaViewModel @Inject constructor(
 
                         is MediaContent.TextFile -> {
                             mediaScreenState.copy(isLoading = false , mediaState = MediaState.TextState(data.text))
+                        }
+
+                        is MediaContent.Video -> {
+                            mediaScreenState.copy(isLoading = false , mediaState = MediaState.VideoState(data.url , player =  player))
                         }
                     }
                 }
@@ -59,11 +72,22 @@ class MediaViewModel @Inject constructor(
                 event.filePath,
                 event.mimeType
             )
+
+            is MediaViewModelEvents.PlayVideo -> playVideo(event.videoUrl)
+        }
+    }
+
+    private fun playVideo(videoUrl: String) {
+        player.apply {
+            setMediaItem(MediaItem.fromUri(Uri.parse(videoUrl)))
+            prepare()
+            play()
         }
     }
 
     sealed interface MediaViewModelEvents {
         data class DownloadMedia(val filePath: String, val mimeType: String?) : MediaViewModelEvents
+        data class PlayVideo(val videoUrl : String) : MediaViewModelEvents
     }
 
 
