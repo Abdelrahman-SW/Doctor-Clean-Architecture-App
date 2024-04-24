@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.beapps.thedoctorapp.content.domain.models.PatientContent
 import com.beapps.thedoctorapp.content.presentation.patientContent.components.PatientContentItem
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.presentation.Screen

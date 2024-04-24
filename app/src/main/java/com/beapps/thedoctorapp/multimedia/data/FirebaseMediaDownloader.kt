@@ -1,6 +1,5 @@
 package com.beapps.thedoctorapp.multimedia.data
 
-import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.beapps.thedoctorapp.multimedia.domain.MediaDownloaderManager
@@ -8,11 +7,9 @@ import com.beapps.thedoctorapp.multimedia.domain.MediaType
 import com.beapps.thedoctorapp.multimedia.domain.MimeTypes
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 
