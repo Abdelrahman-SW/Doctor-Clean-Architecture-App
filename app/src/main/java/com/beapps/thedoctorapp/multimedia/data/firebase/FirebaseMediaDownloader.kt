@@ -76,7 +76,7 @@ class FirebaseMediaDownloader : MediaDownloaderManager {
             try {
                 Result.Success(
                     MediaContent.Image(
-                        storageRef.child(filePath).getBytes(Long.MAX_VALUE).await()
+                        storageRef.child(filePath).downloadUrl.await().toString()
                     )
                 )
             } catch (e: Exception) {

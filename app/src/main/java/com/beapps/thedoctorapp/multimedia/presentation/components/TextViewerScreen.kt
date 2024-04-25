@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.beapps.thedoctorapp.multimedia.presentation.MediaState
 
 @Composable
-fun TextViewerScreen(imageState: MediaState.TextState, modifier: Modifier = Modifier) {
+fun TextViewerScreen(textState: MediaState.TextState, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -24,6 +24,6 @@ fun TextViewerScreen(imageState: MediaState.TextState, modifier: Modifier = Modi
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = imageState.text)
+        Text(text = textState.text)
     }
 }

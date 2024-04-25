@@ -10,7 +10,7 @@ data class MediaScreenState (
 
 sealed interface MediaState {
     data object None : MediaState
-    data class ImageState (val byteArray: ByteArray) : MediaState
+    data class ImageState(val imageUrl: String , val isImageLoading : Boolean) : MediaState
     data class TextState (val text: String) : MediaState
     data class VideoState (val url: String , val player: Player) : MediaState
 }

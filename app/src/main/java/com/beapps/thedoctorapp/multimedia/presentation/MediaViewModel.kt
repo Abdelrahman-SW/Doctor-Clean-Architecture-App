@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
 import com.beapps.thedoctorapp.multimedia.domain.MediaDownloaderManager
@@ -49,7 +48,7 @@ class MediaViewModel @Inject constructor(
                 is Result.Success -> {
                     mediaScreenState = when (val data = result.data) {
                         is MediaContent.Image -> {
-                            mediaScreenState.copy(isLoading = false , mediaState = MediaState.ImageState(data.byteArray))
+                            mediaScreenState.copy(isLoading = false , mediaState = MediaState.ImageState(data.imageUrl , true))
                         }
 
                         is MediaContent.TextFile -> {
@@ -74,6 +73,7 @@ class MediaViewModel @Inject constructor(
             )
 
             is MediaViewModelEvents.PlayVideo -> playVideo(event.videoUrl)
+            MediaViewModelEvents.ImageLoaded -> { mediaScreenState = mediaScreenState.copy(mediaState = (mediaScreenState.mediaState as MediaState.ImageState).copy(isImageLoading = false))}
         }
     }
 
@@ -86,6 +86,7 @@ class MediaViewModel @Inject constructor(
     }
 
     sealed interface MediaViewModelEvents {
+        data object ImageLoaded : MediaViewModel.MediaViewModelEvents
         data class DownloadMedia(val filePath: String, val mimeType: String?) : MediaViewModelEvents
         data class PlayVideo(val videoUrl : String) : MediaViewModelEvents
     }

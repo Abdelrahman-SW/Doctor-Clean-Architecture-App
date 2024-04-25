@@ -48,23 +48,14 @@ fun MediaScreen(patientContent: PatientContent?, navController: NavHostControlle
     }
 
 
-    val imageBitmap = remember(mediaScreenState.mediaState) {
-        if (mediaScreenState.mediaState is MediaState.ImageState) {
-            mediaScreenState.mediaState.let {
-                BitmapFactory.decodeByteArray(it.byteArray, 0, it.byteArray.size)
-                    .asImageBitmap()
-            }
-        } else null
-    }
-
 
     when(val state = mediaScreenState.mediaState) {
         MediaState.None -> Unit
         is MediaState.ImageState -> {
-            ImageViewerScreen(imageBitmap = imageBitmap)
+            ImageViewerScreen(imageState = state, viewModel::onEvent)
         }
         is MediaState.TextState -> {
-            TextViewerScreen(imageState =  state)
+            TextViewerScreen(textState =  state)
         }
 
         is MediaState.VideoState -> {
