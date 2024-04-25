@@ -90,5 +90,8 @@ class MediaViewModel @Inject constructor(
         data class PlayVideo(val videoUrl : String) : MediaViewModelEvents
     }
 
-
+    override fun onCleared() {
+        player.release()
+        super.onCleared()
+    }
 }
