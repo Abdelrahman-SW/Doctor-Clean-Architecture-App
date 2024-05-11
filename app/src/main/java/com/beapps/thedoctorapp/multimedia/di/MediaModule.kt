@@ -22,13 +22,13 @@ import javax.inject.Singleton
 object MediaModule {
     @ViewModelScoped
     @Provides
-    fun provideMediaDownloader() : MediaDownloaderManager {
+    fun provideMediaDownloader(): MediaDownloaderManager {
         return FirebaseMediaDownloader()
     }
 
     @ViewModelScoped
     @Provides
-    fun provideMediaPlayer(app : Application) : Player {
+    fun provideMediaPlayer(app: Application): Player {
         return ExoPlayer.Builder(app).build()
     }
 }

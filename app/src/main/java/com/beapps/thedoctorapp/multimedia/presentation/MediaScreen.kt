@@ -1,33 +1,30 @@
 package com.beapps.thedoctorapp.multimedia.presentation
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.beapps.thedoctorapp.content.domain.models.PatientContent
+import com.beapps.thedoctorapp.content.domain.models.PatientFile
 import com.beapps.thedoctorapp.multimedia.presentation.components.ImageViewerScreen
 import com.beapps.thedoctorapp.multimedia.presentation.components.TextViewerScreen
 import com.beapps.thedoctorapp.multimedia.presentation.components.VideoViewerScreen
 
 @Composable
-fun MediaScreen(patientContent: PatientContent?, navController: NavHostController) {
+fun MediaScreen(patientFile: PatientFile?, navController: NavHostController) {
     val viewModel = hiltViewModel<MediaViewModel>()
 
     LaunchedEffect(key1 = true) {
-        patientContent?.let {
+        patientFile?.let {
             viewModel.onEvent(
                 MediaViewModel.MediaViewModelEvents.DownloadMedia(
-                    patientContent.path,
-                    patientContent.mimeType
+                    patientFile.path,
+                    patientFile.mimeType
                 )
             )
         }

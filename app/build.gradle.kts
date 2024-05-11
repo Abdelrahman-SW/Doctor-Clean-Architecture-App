@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation (libs.androidx.material.icons.extended)
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
     // firebase :
     implementation(platform(libs.com.google.firebase.bom))
     implementation(libs.firebase.crashlytics)
@@ -81,8 +82,6 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation (libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.hilt.android)
     // gson
     implementation (libs.gson)
     // exoPlayer
