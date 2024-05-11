@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.content.domain.ContentManager
@@ -11,6 +12,7 @@ import com.beapps.thedoctorapp.content.domain.models.Patient
 import com.beapps.thedoctorapp.content.domain.models.PatientFile
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,35 +29,58 @@ class PatientFilesViewModel @Inject constructor(
         viewModelScope.launch {
             screenState = screenState.copy(isLoading = true)
             val result = contentManager.getPatientFiles(patient)
-            screenState = when(result) {
+            screenState = when (result) {
                 is Result.Error -> {
-                    screenState.copy(isLoading = false , error = result.error)
+                    screenState.copy(isLoading = false, error = result.error)
                 }
 
                 is Result.Success -> {
-                    screenState.copy(isLoading = false , patientFiles = result.data)
+                    screenState.copy(isLoading = false, allPatientFiles = result.data)
                 }
             }
+
+            snapshotFlow {
+                screenState.searchQuery
+            }.map { query ->
+                if (query.isEmpty()) {
+                    screenState.allPatientFiles
+                } else
+                    screenState.allPatientFiles.filter {
+                        it.name.contains(query, ignoreCase = true)
+                    }
+            }.collect {
+                screenState = screenState.copy(filteredPatientFiles = it)
+            }
         }
     }
 
-    private fun onPatientContentClicked(patientFile : PatientFile) {
-        Log.d("ab_do" , "clicked ${patientFile.mimeType}")
+    private fun onPatientContentClicked(patientFile: PatientFile) {
+        Log.d("ab_do", "clicked ${patientFile.mimeType}")
     }
 
-    fun onEvent(event: PatientContentScreenEvents) {
-        when(event) {
-            is PatientContentScreenEvents.GetPatientFiles -> {
+    private fun onSearchQueryChanged(query: String) {
+        screenState = screenState.copy(searchQuery = query)
+    }
+
+    fun onEvent(event: PatientFilesScreenEvents) {
+        when (event) {
+            is PatientFilesScreenEvents.GetPatientFiles -> {
                 getPatientFiles(event.patient)
             }
-            is PatientContentScreenEvents.PatientFileClicked -> onPatientContentClicked(event.patientFile)
+
+            is PatientFilesScreenEvents.PatientFileClicked -> onPatientContentClicked(event.patientFile)
+            is PatientFilesScreenEvents.OnSearchQueryChanged -> onSearchQueryChanged(event.query)
         }
     }
 
-    sealed interface PatientContentScreenEvents {
+    sealed interface PatientFilesScreenEvents {
         data class GetPatientFiles(val patient: Patient) :
-            PatientContentScreenEvents
-        data class PatientFileClicked(val patientFile : PatientFile) :
-            PatientContentScreenEvents
+            PatientFilesScreenEvents
+
+        data class PatientFileClicked(val patientFile: PatientFile) :
+            PatientFilesScreenEvents
+
+        data class OnSearchQueryChanged(val query: String) : PatientFilesScreenEvents
+
     }
 }

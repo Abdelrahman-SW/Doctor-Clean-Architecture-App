@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                                 navController.previousBackStackEntry?.savedStateHandle?.get<Patient>(
                                     "patient"
                                 )
-                            PatientInfoScreen(patient = patient)
+                            PatientInfoScreen(navController = navController , patient = patient)
                         }
 
 //                        composable(Screen.PatientNotesScreen.route) {

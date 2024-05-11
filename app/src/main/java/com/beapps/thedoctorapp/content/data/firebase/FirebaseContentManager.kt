@@ -19,7 +19,7 @@ class FirebaseContentManager : ContentManager {
     private val patientsCollectionName = "Patients"
     private val patientsFirestoreDb = FirebaseFirestore.getInstance()
 
-    override suspend fun displayPatients(doctorId: String): Result<List<Patient>, Error.GetContentErrors> {
+    override suspend fun getPatients(doctorId: String): Result<List<Patient>, Error.GetContentErrors> {
         val doctorChildRef = storageRef.child(doctorId)
         return try {
             val patients = mutableListOf<Patient>()
