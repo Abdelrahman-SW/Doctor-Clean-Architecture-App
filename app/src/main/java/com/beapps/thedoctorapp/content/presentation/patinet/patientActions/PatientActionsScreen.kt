@@ -77,7 +77,13 @@ fun PatientActionsScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(onClick = {
-
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    "patient",
+                    patient
+                )
+                navController.navigate(
+                    Screen.PatientNotesScreen.route
+                )
             }) {
                 Text(text = "View Notes")
             }

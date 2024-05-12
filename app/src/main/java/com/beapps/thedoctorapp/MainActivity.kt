@@ -23,6 +23,7 @@ import com.beapps.thedoctorapp.content.presentation.patinet.patientsList.Patient
 import com.beapps.thedoctorapp.content.presentation.doctor.profile.ProfileScreenRoot
 import com.beapps.thedoctorapp.content.presentation.patinet.patientActions.PatientActionsScreen
 import com.beapps.thedoctorapp.content.presentation.patinet.patientInfo.PatientInfoScreen
+import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.PatientNotesScreen
 import com.beapps.thedoctorapp.core.presentation.Screen
 import com.beapps.thedoctorapp.multimedia.presentation.MediaScreen
 import com.beapps.thedoctorapp.ui.theme.TheDoctorAppTheme
@@ -88,13 +89,13 @@ class MainActivity : ComponentActivity() {
                             PatientInfoScreen(navController = navController , patient = patient)
                         }
 
-//                        composable(Screen.PatientNotesScreen.route) {
-//                            val patient =
-//                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient>(
-//                                    "patient"
-//                                )
-//                            PatientNotesScreen(patient = patient)
-//                        }
+                        composable(Screen.PatientNotesScreen.route) {
+                            val patient =
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Patient>(
+                                    "patient"
+                                )
+                            PatientNotesScreen(patient = patient , navController = navController)
+                        }
 
                         composable(
                             Screen.MultiMediaScreen.route
