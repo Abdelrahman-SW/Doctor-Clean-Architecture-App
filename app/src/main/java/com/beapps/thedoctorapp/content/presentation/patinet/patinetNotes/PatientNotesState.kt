@@ -6,10 +6,13 @@ data class PatientNotesState(
     val notes: List<PatientNote> = emptyList(),
     val viewState: ViewState = ViewState.VIEW,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val selectedNote: PatientNote? = null,
+    val noteText: String = ""
 )
 
 enum class ViewState {
     ADD,
+    EDIT,
     VIEW
 }

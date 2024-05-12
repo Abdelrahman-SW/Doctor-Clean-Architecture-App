@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.content.data.firebase.dto
+package com.beapps.thedoctorapp.content.data.remote.firebase.dto
 
 import com.beapps.thedoctorapp.content.domain.models.Patient
 

@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,20 +14,40 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.beapps.thedoctorapp.content.domain.models.Patient
-import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.AddNoteScreen
+import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.UpsertNoteScreen
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.NotesViewScreen
 import com.beapps.thedoctorapp.ui.theme.Purple40
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientNotesScreen(modifier: Modifier = Modifier , navController: NavController , patient : Patient?) {
+fun PatientNotesScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    patient: Patient?
+) {
     val viewModel = hiltViewModel<PatientNotesViewModel>()
     val state = viewModel.state
+    val onBackPressed: () -> Unit = remember(state.viewState)
+    {
+        {
+            when (state.viewState) {
+                ViewState.ADD -> viewModel.onEvent(PatientNotesViewModel.PatientNotesEvents.ChangeToViewNotes)
+                ViewState.EDIT -> viewModel.onEvent(PatientNotesViewModel.PatientNotesEvents.ChangeToViewNotes)
+                ViewState.VIEW -> navController.popBackStack()
+            }
+        }
+    }
+
+    BackHandler {
+        onBackPressed()
+    }
+
     Scaffold(
         modifier = modifier
             .fillMaxSize(),
@@ -35,12 +56,18 @@ fun PatientNotesScreen(modifier: Modifier = Modifier , navController: NavControl
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Purple40),
                 title = {
                     Text(
-                        text = "Notes",
+                        text = when (state.viewState) {
+                            ViewState.ADD -> "Add Note"
+                            ViewState.EDIT -> "Update Note"
+                            ViewState.VIEW -> "Notes"
+                        },
                         color = Color.White
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        onBackPressed()
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "back"
@@ -48,14 +75,16 @@ fun PatientNotesScreen(modifier: Modifier = Modifier , navController: NavControl
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        viewModel.onAddNoteClicked()
-                    }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.NoteAdd,
-                            contentDescription = "Add Note",
-                            tint = Color.White
-                        )
+                    if (state.viewState == ViewState.VIEW) {
+                        IconButton(onClick = {
+                            viewModel.onEvent(PatientNotesViewModel.PatientNotesEvents.OnAddNoteClicked)
+                        }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.NoteAdd,
+                                contentDescription = "Add Note",
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
             )
@@ -63,8 +92,26 @@ fun PatientNotesScreen(modifier: Modifier = Modifier , navController: NavControl
 
     ) { padding ->
         when (state.viewState) {
-            ViewState.ADD -> AddNoteScreen(modifier = Modifier.padding(padding) , state)
-            ViewState.VIEW -> NotesViewScreen(modifier = Modifier.padding(padding) , state)
+            ViewState.ADD -> UpsertNoteScreen(
+                modifier = Modifier.padding(padding),
+                state,
+                viewModel::onEvent,
+                patient
+            )
+
+            ViewState.VIEW -> NotesViewScreen(
+                modifier = Modifier.padding(padding),
+                state,
+                viewModel::onEvent,
+                patient
+            )
+
+            ViewState.EDIT -> UpsertNoteScreen(
+                modifier = Modifier.padding(padding),
+                state,
+                viewModel::onEvent,
+                patient
+            )
         }
     }
 }

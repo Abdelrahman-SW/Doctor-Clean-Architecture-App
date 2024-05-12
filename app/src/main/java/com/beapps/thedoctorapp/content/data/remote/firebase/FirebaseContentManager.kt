@@ -1,7 +1,7 @@
-package com.beapps.thedoctorapp.content.data.firebase
+package com.beapps.thedoctorapp.content.data.remote.firebase
 
-import com.beapps.thedoctorapp.content.data.firebase.dto.PatientDto
-import com.beapps.thedoctorapp.content.data.firebase.dto.toPatient
+import com.beapps.thedoctorapp.content.data.remote.firebase.dto.PatientDto
+import com.beapps.thedoctorapp.content.data.remote.firebase.dto.toPatient
 import com.beapps.thedoctorapp.content.domain.ContentManager
 import com.beapps.thedoctorapp.content.domain.models.Patient
 import com.beapps.thedoctorapp.content.domain.models.PatientFile

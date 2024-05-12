@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.content.data.firebase
+package com.beapps.thedoctorapp.content.data.remote.firebase
 
 import com.beapps.thedoctorapp.content.domain.models.PatientFile
 import com.google.firebase.storage.StorageMetadata

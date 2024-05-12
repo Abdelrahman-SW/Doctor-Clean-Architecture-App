@@ -7,32 +7,103 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.content.domain.NoteRepo
 import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.content.domain.models.PatientNote
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PatientNotesViewModel @Inject constructor(
-    val noteRepo: NoteRepo
+    private val noteRepo: NoteRepo
 ) : ViewModel() {
 
+    private var getNotesFired = false
     var state by mutableStateOf(PatientNotesState())
         private set
 
-    fun onAddNoteClicked() {
-        state = state.copy(viewState = ViewState.ADD)
+    private fun onAddNoteClicked() {
+        state = state.copy(viewState = ViewState.ADD , noteText = "")
     }
 
-    fun changeToViewNotes () {
+    private fun onNoteClicked(note: PatientNote) {
+        state = state.copy(viewState = ViewState.EDIT, selectedNote = note)
+    }
+
+    private fun changeToViewNotes() {
         state = state.copy(viewState = ViewState.VIEW)
     }
-    fun getNotes (patient: Patient, doctorId: String) {
+
+    private fun getNotes(patient: Patient) {
+        if (getNotesFired) return
+        getNotesFired = true
         viewModelScope.launch {
             state = state.copy(isLoading = true)
-            noteRepo.getPatientNotes(patient, doctorId).collect {
-                state = state.copy(notes = it)
+            noteRepo.getPatientNotes(patient).collect {
+                state = state.copy(notes = it.reversed() , isLoading = false)
             }
-            state = state.copy(isLoading = false)
         }
+    }
+
+    private fun onNoteTextChange(note: String) {
+        state = if (state.viewState == ViewState.ADD) {
+            state.copy(noteText = note)
+        } else {
+            state.copy(selectedNote = state.selectedNote!!.copy(note = note))
+
+        }
+    }
+
+
+    fun onEvent(event: PatientNotesEvents) {
+        when (event) {
+            is PatientNotesEvents.ChangeToViewNotes -> changeToViewNotes()
+            is PatientNotesEvents.GetNotes -> getNotes(event.patient)
+            is PatientNotesEvents.OnAddNoteClicked -> onAddNoteClicked()
+            is PatientNotesEvents.OnNoteClicked -> onNoteClicked(event.note)
+            is PatientNotesEvents.UpsertNote -> upsertNote(event.patient)
+            is PatientNotesEvents.NoteTextChange -> onNoteTextChange(event.note)
+            is PatientNotesEvents.OnNoteDeleteClicked -> deleteNote(event.note)
+        }
+    }
+
+    private fun deleteNote(note: PatientNote) {
+        viewModelScope.launch {
+            noteRepo.deleteNote(note)
+        }
+    }
+
+
+    private fun upsertNote(patient: Patient?) {
+        patient?.let {
+            val note = if (state.viewState == ViewState.ADD) {
+                PatientNote(
+                    note = state.noteText,
+                    byDoctorId = patient.assignedDoctorId,
+                    toPatientId = patient.id
+                )
+            }
+            else {
+                state.selectedNote!!
+            }
+            viewModelScope.launch {
+                if (state.viewState == ViewState.ADD) {
+                    noteRepo.insertNote(note)
+                } else {
+                    noteRepo.updateNote(note)
+                }
+                state = state.copy(viewState = ViewState.VIEW)
+            }
+        }
+    }
+
+
+    sealed interface PatientNotesEvents {
+        data object ChangeToViewNotes : PatientNotesEvents
+        data object OnAddNoteClicked : PatientNotesEvents
+        data class OnNoteClicked(val note: PatientNote) : PatientNotesEvents
+        data class OnNoteDeleteClicked(val note: PatientNote) : PatientNotesEvents
+        data class GetNotes(val patient: Patient) : PatientNotesEvents
+        data class UpsertNote(val patient: Patient?) : PatientNotesEvents
+        class NoteTextChange(val note: String) : PatientNotesViewModel.PatientNotesEvents
     }
 }

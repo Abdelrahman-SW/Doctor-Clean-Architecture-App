@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.content.data.db
+package com.beapps.thedoctorapp.content.data.local.db
 
 import androidx.room.Dao
 import androidx.room.Delete

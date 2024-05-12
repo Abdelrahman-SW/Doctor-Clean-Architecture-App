@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 interface NoteRepo {
     fun getPatientNotes(
         patient: Patient,
-        doctorId: String
     ): Flow<List<PatientNote>>
+
+    suspend fun insertNote (note: PatientNote)
+    suspend fun updateNote (note: PatientNote)
+    suspend fun deleteNote (note: PatientNote)
 }

@@ -2,9 +2,9 @@ package com.beapps.thedoctorapp.content.di
 
 import android.app.Application
 import androidx.room.Room
-import com.beapps.thedoctorapp.content.data.db.NoteDb
-import com.beapps.thedoctorapp.content.data.firebase.FirebaseContentManager
-import com.beapps.thedoctorapp.content.data.repo.NoteRepoImpl
+import com.beapps.thedoctorapp.content.data.local.db.NoteDb
+import com.beapps.thedoctorapp.content.data.remote.firebase.FirebaseContentManager
+import com.beapps.thedoctorapp.content.data.local.db.repo.NoteRepoImpl
 import com.beapps.thedoctorapp.content.domain.ContentManager
 import com.beapps.thedoctorapp.content.domain.NoteRepo
 import dagger.Module

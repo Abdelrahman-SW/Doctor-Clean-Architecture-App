@@ -1,6 +1,6 @@
-package com.beapps.thedoctorapp.content.data
+package com.beapps.thedoctorapp.content.data.local.db
 
-import com.beapps.thedoctorapp.content.data.db.NoteEntity
+import com.beapps.thedoctorapp.content.data.local.db.NoteEntity
 import com.beapps.thedoctorapp.content.domain.models.PatientNote
 
 fun NoteEntity.toPatientNote() =
@@ -11,5 +11,5 @@ fun NoteEntity.toPatientNote() =
 
 fun PatientNote.toNoteEntity() =
     NoteEntity(
-        note = note, createdAt = createdAt, byDoctorId = byDoctorId, toPatientId = toPatientId
+        id = id , note = note, createdAt = createdAt, byDoctorId = byDoctorId, toPatientId = toPatientId
     )
