@@ -30,7 +30,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -91,9 +91,9 @@ dependencies {
     implementation(libs.coil.compose)
 
     //room-db :
-    implementation (libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    kapt (libs.androidx.room.compiler)
+//    implementation (libs.androidx.room.runtime)
+//    implementation(libs.androidx.room.ktx)
+//    kapt (libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

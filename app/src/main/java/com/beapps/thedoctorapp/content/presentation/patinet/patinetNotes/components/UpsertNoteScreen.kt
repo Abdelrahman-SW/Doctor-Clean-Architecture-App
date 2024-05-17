@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ fun UpsertNoteScreen(
     onEvent: (PatientNotesViewModel.PatientNotesEvents) -> Unit,
     patient: Patient?
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -32,8 +34,20 @@ fun UpsertNoteScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (state.viewState == ViewState.ADD) {
+            TextField(
+                label = { Text(text = "Title (can`t be changed later)") },
+                value =  state.noteTitle,
+                onValueChange = {
+                    onEvent(PatientNotesViewModel.PatientNotesEvents.NoteTitleChange(it))
+                })
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         TextField(
-            value = if (state.viewState == ViewState.ADD) state.noteText else state.selectedNote?.note ?: "",
+            label = { Text(text = "Description") },
+            value = if (state.viewState == ViewState.ADD) state.noteText else state.selectedNote?.note
+                ?: "",
             onValueChange = {
                 onEvent(PatientNotesViewModel.PatientNotesEvents.NoteTextChange(it))
             })
@@ -45,5 +59,11 @@ fun UpsertNoteScreen(
         }) {
             Text(text = if (state.viewState == ViewState.ADD) "Add Note" else "Update Note")
         }
+
+        if (state.isLoading) {
+            Spacer(modifier = Modifier.height(16.dp))
+            CircularProgressIndicator()
+        }
     }
+
 }

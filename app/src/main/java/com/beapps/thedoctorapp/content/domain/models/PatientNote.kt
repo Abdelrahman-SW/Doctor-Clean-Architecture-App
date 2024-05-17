@@ -1,11 +1,11 @@
 package com.beapps.thedoctorapp.content.domain.models
 
 data class PatientNote(
-    val id: Int = 0,
+    val id: String,
     val note: String,
-    val createdAt: Long = System.currentTimeMillis(),
-    val byDoctorId: String,
-    val toPatientId: String
+    val createdAt: Long = 0L,
+    val byDoctorId: String = "",
+    val toPatientId: String =""
 )
 
 

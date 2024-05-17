@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.beapps.thedoctorapp.content.domain.models.Patient
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.PatientNotesState
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.PatientNotesViewModel
+import com.beapps.thedoctorapp.core.domain.Error
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -25,19 +28,21 @@ fun NotesViewScreen(
     patient: Patient?
 ) {
 
+
     patient?.let {
 
         LaunchedEffect(key1 = true) {
             onEvent(PatientNotesViewModel.PatientNotesEvents.GetNotes(patient))
         }
 
-        if (state.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+            if (state.isLoading) {
                 CircularProgressIndicator()
             }
-        }
-        else {
-            LazyColumn(modifier = modifier) {
+
+            LazyColumn(modifier = modifier.fillMaxSize()) {
                 items(state.notes, key = { it.id }) { note ->
                     PatientNoteItem(
                         modifier = Modifier.animateItemPlacement(),
@@ -54,8 +59,9 @@ fun NotesViewScreen(
             }
         }
 
-
     } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = state.error ?: "An Error Occurred")
+        Text(
+            text = "An Error Occurred Please Refresh and Try Again"
+        )
     }
 }

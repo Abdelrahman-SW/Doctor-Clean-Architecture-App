@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.util.TableInfo
 import com.beapps.thedoctorapp.content.domain.models.PatientNote
 import com.beapps.thedoctorapp.content.presentation.toReadableDate
 import com.beapps.thedoctorapp.ui.theme.Purple40
@@ -40,7 +39,7 @@ fun PatientNoteItem(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = note.note
+                text = note.id
             )
 
             Text(

@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,14 +15,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.beapps.thedoctorapp.content.domain.models.Patient
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.UpsertNoteScreen
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.NotesViewScreen
+import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.ui.theme.Purple40
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,6 +35,7 @@ fun PatientNotesScreen(
     navController: NavController,
     patient: Patient?
 ) {
+    val context = LocalContext.current
     val viewModel = hiltViewModel<PatientNotesViewModel>()
     val state = viewModel.state
     val onBackPressed: () -> Unit = remember(state.viewState)
@@ -47,6 +52,19 @@ fun PatientNotesScreen(
     BackHandler {
         onBackPressed()
     }
+
+
+    LaunchedEffect(key1 = state.error) {
+        state.error?.let {
+            val message = when (it) {
+                is Error.ManageNotesErrors.Others -> it.message ?: "An Error Occurred"
+                Error.ManageNotesErrors.TitleAlreadyExists -> "Title Already Exits"
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            viewModel.onErrorConsumed()
+        }
+    }
+
 
     Scaffold(
         modifier = modifier

@@ -17,18 +17,25 @@ sealed interface Error {
 
     }
 
-    sealed interface GetContentErrors : Error{
+    sealed interface GetContentErrors : Error {
         data object EmptyContent : GetContentErrors
 
         data class Others (val message: String?) : GetContentErrors
 
     }
 
-    sealed interface DownloadMediaErrors : Error{
+    sealed interface DownloadMediaErrors : Error {
         data object EmptyContent : DownloadMediaErrors
         data object UnSupportedMedia : DownloadMediaErrors
 
         data class Others (val message: String?) : DownloadMediaErrors
+
+    }
+
+    sealed interface ManageNotesErrors : Error {
+        data object TitleAlreadyExists : ManageNotesErrors
+
+        data class Others (val message: String?) : ManageNotesErrors
 
     }
 }

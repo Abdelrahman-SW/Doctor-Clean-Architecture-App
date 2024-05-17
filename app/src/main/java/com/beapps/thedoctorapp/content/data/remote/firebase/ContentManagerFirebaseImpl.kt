@@ -13,7 +13,7 @@ import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
-class FirebaseContentManager : ContentManager {
+class ContentManagerFirebaseImpl : ContentManager {
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
     private val patientsCollectionName = "Patients"
