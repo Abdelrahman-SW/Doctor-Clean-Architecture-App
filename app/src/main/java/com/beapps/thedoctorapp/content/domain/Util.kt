@@ -3,7 +3,6 @@ package com.beapps.thedoctorapp.content.domain
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import com.beapps.thedoctorapp.content.domain.models.Patient
 
 const val DELIMITER_CHAR = "_"
 

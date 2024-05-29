@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,7 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.beapps.thedoctorapp.content.domain.copyToClipboard
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 import com.beapps.thedoctorapp.ui.theme.Purple40
 
 @OptIn(ExperimentalMaterial3Api::class)

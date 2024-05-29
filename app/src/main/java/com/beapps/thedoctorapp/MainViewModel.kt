@@ -1,7 +1,7 @@
 package com.beapps.thedoctorapp
 
 import androidx.lifecycle.ViewModel
-import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.core.domain.Doctor
 import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
 import com.beapps.thedoctorapp.core.presentation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel

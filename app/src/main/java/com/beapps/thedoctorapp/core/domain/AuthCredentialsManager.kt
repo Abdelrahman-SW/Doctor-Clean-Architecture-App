@@ -1,7 +1,5 @@
 package com.beapps.thedoctorapp.core.domain
 
-import com.beapps.thedoctorapp.auth.domain.Doctor
-
 interface AuthCredentialsManager {
     fun saveDoctorCredentials(doctor: Doctor)
 

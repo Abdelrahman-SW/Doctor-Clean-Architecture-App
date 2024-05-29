@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.UpsertNoteScreen
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.components.NotesViewScreen
 import com.beapps.thedoctorapp.core.domain.Error

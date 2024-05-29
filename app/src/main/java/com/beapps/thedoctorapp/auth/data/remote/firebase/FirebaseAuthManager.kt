@@ -2,7 +2,7 @@ package com.beapps.thedoctorapp.auth.data.remote.firebase
 
 import com.beapps.thedoctorapp.auth.data.dto.DoctorDto
 import com.beapps.thedoctorapp.auth.domain.AuthManager
-import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.core.domain.Doctor
 import com.beapps.thedoctorapp.auth.data.mappers.toDoctor
 import com.beapps.thedoctorapp.auth.data.mappers.toDoctorDto
 import com.beapps.thedoctorapp.core.domain.Error

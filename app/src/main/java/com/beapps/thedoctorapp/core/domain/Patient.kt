@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.content.domain.models
+package com.beapps.thedoctorapp.core.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

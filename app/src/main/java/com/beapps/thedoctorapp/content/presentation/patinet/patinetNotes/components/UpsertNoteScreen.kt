@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.PatientNotesState
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.PatientNotesViewModel
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.ViewState

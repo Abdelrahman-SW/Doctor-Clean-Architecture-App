@@ -8,7 +8,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.content.domain.ContentManager
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 import com.beapps.thedoctorapp.content.domain.models.PatientFile
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel

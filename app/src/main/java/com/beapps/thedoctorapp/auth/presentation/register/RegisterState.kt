@@ -1,6 +1,6 @@
 package com.beapps.thedoctorapp.auth.presentation.register
 
-import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.core.domain.Doctor
 
 
 data class RegisterState(

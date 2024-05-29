@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.content.domain.PatientNotesManager
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 import com.beapps.thedoctorapp.content.domain.models.PatientNote
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel

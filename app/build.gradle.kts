@@ -63,6 +63,8 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    // LifeCycleService
+    implementation (libs.androidx.lifecycle.service)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -89,6 +91,9 @@ dependencies {
     implementation (libs.androidx.media3.ui)
     // coil
     implementation(libs.coil.compose)
+
+    // For MPAndroidChart
+    implementation (libs.mpandroidchart)
 
     //room-db :
 //    implementation (libs.androidx.room.runtime)

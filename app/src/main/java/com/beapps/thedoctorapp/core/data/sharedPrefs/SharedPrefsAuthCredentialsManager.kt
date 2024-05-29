@@ -1,7 +1,7 @@
 package com.beapps.thedoctorapp.core.data.sharedPrefs
 
 import android.content.Context
-import com.beapps.thedoctorapp.auth.domain.Doctor
+import com.beapps.thedoctorapp.core.domain.Doctor
 import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
 
 class SharedPrefsAuthCredentialsManager(private val context: Context) : AuthCredentialsManager {

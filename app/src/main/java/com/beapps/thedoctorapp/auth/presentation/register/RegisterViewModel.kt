@@ -6,9 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beapps.thedoctorapp.auth.domain.AuthManager
-import com.beapps.thedoctorapp.auth.domain.Doctor
-import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenEvents
-import com.beapps.thedoctorapp.auth.presentation.login.LoginScreenState
+import com.beapps.thedoctorapp.core.domain.Doctor
 import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
 import com.beapps.thedoctorapp.core.domain.Result
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -3,7 +3,7 @@ package com.beapps.thedoctorapp.content.data.remote.firebase
 import com.beapps.thedoctorapp.content.data.remote.firebase.dto.PatientDto
 import com.beapps.thedoctorapp.content.data.remote.firebase.dto.toPatient
 import com.beapps.thedoctorapp.content.domain.ContentManager
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 import com.beapps.thedoctorapp.content.domain.models.PatientFile
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Result
@@ -78,4 +78,14 @@ class ContentManagerFirebaseImpl : ContentManager {
         // Use metadata as needed
     }
 
+//    override suspend fun uploadGraph(patient: Patient , byteArray: ByteArray) {
+//        val doctorChildRef = storageRef.child(patient.assignedDoctorId)
+//        val patientChildRef = doctorChildRef.child(patient.id)
+//        val graphRef = patientChildRef.child("graphs/graph.png")
+//        val metadata = StorageMetadata.Builder()
+//            .setContentType("image/png")
+//            .build()
+//        graphRef.putBytes(byteArray , metadata).await()
+//    }
+//
 }

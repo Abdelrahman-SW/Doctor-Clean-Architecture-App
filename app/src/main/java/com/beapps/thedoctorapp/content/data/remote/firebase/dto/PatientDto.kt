@@ -1,7 +1,7 @@
 package com.beapps.thedoctorapp.content.data.remote.firebase.dto
 
 import androidx.annotation.Keep
-import com.beapps.thedoctorapp.content.domain.models.Patient
+import com.beapps.thedoctorapp.core.domain.Patient
 @Keep
 data class PatientDto(
     val doctor_ID: String = "",

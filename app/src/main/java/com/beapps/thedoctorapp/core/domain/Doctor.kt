@@ -1,4 +1,4 @@
-package com.beapps.thedoctorapp.auth.domain
+package com.beapps.thedoctorapp.core.domain
 
 
 data class Doctor(
