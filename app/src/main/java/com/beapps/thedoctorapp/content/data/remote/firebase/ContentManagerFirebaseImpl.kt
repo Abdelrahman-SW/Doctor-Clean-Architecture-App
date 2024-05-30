@@ -64,7 +64,7 @@ class ContentManagerFirebaseImpl : ContentManager {
         return try {
             val doctorChildRef = storageRef.child(patient.assignedDoctorId)
             val patientChildRef = doctorChildRef.child(patient.id)
-            val files = patientChildRef.listAll().await().items
+            val files = patientChildRef.child("Graphs").listAll().await().items + patientChildRef.listAll().await().items
             val patientFiles = files.map { file ->
                 val name = file.name
                 val metadata = file.metadata.await()
