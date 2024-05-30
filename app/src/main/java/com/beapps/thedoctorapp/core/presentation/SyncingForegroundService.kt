@@ -31,8 +31,8 @@ class SyncingForegroundService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
 
         val notificationItem = NotificationItem(
-            "Syncing graphs",
-            "please wait the process is running",
+            "Syncing graphs .. ",
+            "The app is Currently Syncing graphs of Your Patients.",
             R.drawable.ic_launcher_foreground,
             NotificationCompat.CATEGORY_SERVICE
         )
@@ -51,7 +51,8 @@ class SyncingForegroundService : LifecycleService() {
         // Your service logic here, e.g., starting a long-running task in a new thread or coroutine
         lifecycleScope.launch {
             authCredentialsManager.getCurrentLoggedInDoctor()?.let {
-                delay(5000L)
+                val result = syncManager.syncGraphsForDoctorPatients(it)
+                Log.d("ab_do", "syncing result: $result")
                 stopSelf()
             }
         }

@@ -6,6 +6,8 @@ import com.beapps.thedoctorapp.auth.domain.AuthManager
 import com.beapps.thedoctorapp.core.data.sharedPrefs.SharedPrefsAuthCredentialsManager
 import com.beapps.thedoctorapp.core.data.sharedPrefs.SyncManagerFirebaseImpl
 import com.beapps.thedoctorapp.core.domain.AuthCredentialsManager
+import com.beapps.thedoctorapp.core.domain.GraphManager
+import com.beapps.thedoctorapp.core.domain.GraphManagerMPChartImpl
 import com.beapps.thedoctorapp.core.domain.SyncManager
 import dagger.Module
 import dagger.Provides
@@ -25,7 +27,13 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideSyncManager() : SyncManager {
-        return SyncManagerFirebaseImpl()
+    fun provideGraphManager(@ApplicationContext context : Context) : GraphManager<String , Float> {
+        return GraphManagerMPChartImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSyncManager(graphManager: GraphManager<String , Float>) : SyncManager {
+        return SyncManagerFirebaseImpl(graphManager)
     }
 }

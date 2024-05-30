@@ -38,4 +38,14 @@ sealed interface Error {
         data class Others (val message: String?) : ManageNotesErrors
 
     }
+
+
+    sealed interface SyncingErrors : Error {
+
+        sealed interface SyncingPatientsGraphsErrors : SyncingErrors {
+            data object EmptyPatients : SyncingPatientsGraphsErrors
+            data class SyncingFailed (val message: String?) : SyncingPatientsGraphsErrors
+
+        }
+    }
 }

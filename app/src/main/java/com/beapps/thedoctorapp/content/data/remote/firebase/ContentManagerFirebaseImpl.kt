@@ -65,27 +65,16 @@ class ContentManagerFirebaseImpl : ContentManager {
             val doctorChildRef = storageRef.child(patient.assignedDoctorId)
             val patientChildRef = doctorChildRef.child(patient.id)
             val files = patientChildRef.listAll().await().items
-            val patientContents = files.map { file ->
+            val patientFiles = files.map { file ->
                 val name = file.name
                 val metadata = file.metadata.await()
-                val patientContent = metadata.toPatientContent().copy(name = name)
-                patientContent
+                val patientFile = metadata.toPatientFile().copy(name = name)
+                patientFile
             }
-            Result.Success(patientContents)
+            Result.Success(patientFiles)
         } catch (e: Exception) {
             Result.Error(Error.GetContentErrors.Others(message = e.message))
         }
         // Use metadata as needed
     }
-
-//    override suspend fun uploadGraph(patient: Patient , byteArray: ByteArray) {
-//        val doctorChildRef = storageRef.child(patient.assignedDoctorId)
-//        val patientChildRef = doctorChildRef.child(patient.id)
-//        val graphRef = patientChildRef.child("graphs/graph.png")
-//        val metadata = StorageMetadata.Builder()
-//            .setContentType("image/png")
-//            .build()
-//        graphRef.putBytes(byteArray , metadata).await()
-//    }
-//
 }
