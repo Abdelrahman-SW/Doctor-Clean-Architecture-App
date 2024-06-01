@@ -51,7 +51,8 @@ class GraphManagerMPChartImpl(
         lineChart.xAxis.axisMaximum = points.size.toFloat() + 1
         lineChart.xAxis.valueFormatter = IndexAxisValueFormatter(xLabels)
         lineChart.axisLeft.labelCount = yLabelCounts
-        val yAxisBuffer = (maxY - minY) * 0.1f
+        var yAxisBuffer = (maxY - minY) * 0.1f
+        if (yAxisBuffer <= 0f) yAxisBuffer = 5f
         lineChart.axisLeft.axisMinimum = minY - yAxisBuffer
         lineChart.axisLeft.axisMaximum = maxY + yAxisBuffer
         val description = Description()
