@@ -12,7 +12,7 @@
 
 <h2 align="left">About :</h2>
 
-The Doctor App is an Application to The Clean Architecture app code, that let the code fit well and be scalable and can 
+The Doctor App is an Implementation to The Clean Architecture app code, that let the code fit well and be scalable and can 
 be easily extendable.
 The app is made to apply most of clean arch tips and guidelines 
 The main idea of ​​the app is that : it let the doctor search for his patients that are registered with him
@@ -212,7 +212,7 @@ The Data layer is responsible for managing data sources. It includes repositorie
 
 
 <h2 align="left">Conclusion</h2>
-This Simple App Is An Application To The Clean Arch App Code , in this App I followed The Mvvm design pattern , and i packaged the app code with features and then split each feature package 
+This Simple App Is An Implementation To The Clean Arch App Code , in this App I followed The Mvvm design pattern , and i packaged the app code with features and then split each feature package 
 by presentation,domain,data layers
 
 And i applied the di (dependency Injection) and concrete interfaces ,
