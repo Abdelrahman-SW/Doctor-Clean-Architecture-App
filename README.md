@@ -111,7 +111,7 @@ The Data layer is responsible for managing data sources. It includes repositorie
 <h2>Defining Concrete Interfaces in Software Development</h2>
 
 <p align="left">
-  <img src="https://github.com/Abdelrahman-SW/Doctor-Clean-Architecture-App/assets/171629145/3c58ab55-e762-4668-bb57-850a4cb6cc38" width="1080" height="720">
+  <img src="https://github.com/Abdelrahman-SW/Doctor-Clean-Architecture-App/assets/171629145/3c58ab55-e762-4668-bb57-850a4cb6cc38" width="1080" height="480">
 </p>
 
 <p>Concrete interfaces in software development refer to well-defined contracts that specify the methods and behaviors expected from classes that implement them. They provide several key benefits:</p>
