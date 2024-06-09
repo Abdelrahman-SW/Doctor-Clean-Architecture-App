@@ -26,6 +26,8 @@ so let`s talk more about how i acheived the clean arch guidlines on this app cod
 
 -- Firebase Storage , Firebase Firestore : For Auth and save patients files and graphs and doctor notes
 
+-- MPAndroidChart Lib To Draw Charts , link of lib 🔗 : https://github.com/PhilJay/MPAndroidChart
+
 -- coroutines , flows , viewModel , ForegroundServices , Notification SDk and more ..
 
 
@@ -126,6 +128,7 @@ The Data layer is responsible for managing data sources. It includes repositorie
 <h3>Decoupling</h3>
 <p>Interfaces promote loose coupling between components, making the system more modular and easier to maintain.</p>
 
+<br></br>
 
 <h2>Benefits of Dependency Injection in Clean Architecture</h2>
 
@@ -191,20 +194,31 @@ The Data layer is responsible for managing data sources. It includes repositorie
 
 <br></br>
 <p align="center">
-  <img src="https://github.com/Abdelrahman-SW/Hm10-Ble-App/assets/171629145/f733394d-75b9-447e-8880-48515715ad2a" width="360" height="640">
+  <img src="https://github.com/Abdelrahman-SW/Doctor-Clean-Architecture-App/assets/171629145/40744f80-2116-4d58-b1ca-6a7a277c6159" width="360" height="720">
 </p>
 <br></br>
 
 <br></br>
 <p align="center">
-  <img src="https://github.com/Abdelrahman-SW/Hm10-Ble-App/assets/171629145/8e595025-ba23-45e8-888a-be13f3a0cb88" width="360" height="640">
+  <img src="https://github.com/Abdelrahman-SW/Doctor-Clean-Architecture-App/assets/171629145/bb4c8f64-48a5-4ab4-879d-9ec72004c4c8" width="360" height="720">
 </p>
 <br></br>
 
+<br></br>
+<p align="center">
+  <img src="https://github.com/Abdelrahman-SW/Doctor-Clean-Architecture-App/assets/171629145/d8c7559b-e1a7-49e2-955d-6ef4f8207c04" width="360" height="720">
+</p>
+<br></br>
+
+
 <h2 align="left">Conclusion</h2>
-This App is Considred As A General Ble Connection App So You can Customize The App To Read/Send Data From/To Any Device That Support Ble
-By replace the notifyServiceUUID and notifyCharacteristicUUID with Your Device Specifications Values and handle the data you received To make it in a readable format By Following Your Device Doc Instructions on how to format the received data and how to send a data to The Ble Device In A Correct Format And that` is !
+This Simple App Is An Application To The Clean Arch App Code , in this App I followed The Mvvm design pattern , and i packaged the app code with features and then split each feature package 
+by presentation,domain,data layers
+
+And i applied the di (dependency Injection) and concrete interfaces ,
+
+In this way i ensure that my app code is now scalable and can be extend very easily ! 🎉🎉🎉
 
 <br></br>
--- This App Was Developed At 2023 📅
+-- This App Was Developed At 2024 📅
 <br></br>
