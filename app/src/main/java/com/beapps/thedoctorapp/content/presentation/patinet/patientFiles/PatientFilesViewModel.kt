@@ -28,7 +28,7 @@ class PatientFilesViewModel @Inject constructor(
     private fun getPatientFiles(patient: Patient) {
         viewModelScope.launch {
             screenState = screenState.copy(isLoading = true)
-            val result = contentManager.getPatientFiles(patient)
+            val result = contentManager.getPatientFiles(patient , graphsOnly =  screenState.showGraphsOnly)
             screenState = when (result) {
                 is Result.Error -> {
                     screenState.copy(isLoading = false, error = result.error)
@@ -70,7 +70,12 @@ class PatientFilesViewModel @Inject constructor(
 
             is PatientFilesScreenEvents.PatientFileClicked -> onPatientContentClicked(event.patientFile)
             is PatientFilesScreenEvents.OnSearchQueryChanged -> onSearchQueryChanged(event.query)
+            is PatientFilesScreenEvents.ShowGraphsOnly -> showGraphsOnly(event.showGraphs)
         }
+    }
+
+    private fun showGraphsOnly(showGraphs: Boolean) {
+        screenState = screenState.copy(showGraphsOnly = showGraphs)
     }
 
     sealed interface PatientFilesScreenEvents {
@@ -81,6 +86,8 @@ class PatientFilesViewModel @Inject constructor(
             PatientFilesScreenEvents
 
         data class OnSearchQueryChanged(val query: String) : PatientFilesScreenEvents
+
+        data class ShowGraphsOnly (val showGraphs : Boolean) : PatientFilesScreenEvents
 
     }
 }

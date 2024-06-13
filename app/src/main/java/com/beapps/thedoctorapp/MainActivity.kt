@@ -1,5 +1,6 @@
 package com.beapps.thedoctorapp
 
+import PatientFilesScreenRoot
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,7 +19,6 @@ import com.beapps.thedoctorapp.content.domain.models.PatientFile
 import com.beapps.thedoctorapp.content.presentation.doctor.home.HomeScreenRoot
 import com.beapps.thedoctorapp.content.presentation.doctor.profile.ProfileScreenRoot
 import com.beapps.thedoctorapp.content.presentation.patinet.patientActions.PatientActionsScreen
-import com.beapps.thedoctorapp.content.presentation.patinet.patientFiles.PatientContentScreenRoot
 import com.beapps.thedoctorapp.content.presentation.patinet.patientInfo.PatientInfoScreen
 import com.beapps.thedoctorapp.content.presentation.patinet.patientsList.PatientScreenRoot
 import com.beapps.thedoctorapp.content.presentation.patinet.patinetNotes.PatientNotesScreen
@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                 navController.previousBackStackEntry?.savedStateHandle?.get<Patient>(
                                     "patient"
                                 )
-                            PatientContentScreenRoot(navController, patient)
+                            PatientFilesScreenRoot(navController, patient)
                         }
 
                         composable(Screen.PatientInfoScreen.route) {

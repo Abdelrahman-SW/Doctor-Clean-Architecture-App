@@ -1,24 +1,25 @@
-@file:JvmName("PatientFilesViewModelKt")
-
-package com.beapps.thedoctorapp.content.presentation.patinet.patientFiles
-
-
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AutoGraph
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
@@ -34,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.beapps.thedoctorapp.content.presentation.patinet.patientFiles.PatientFilesScreenState
+import com.beapps.thedoctorapp.content.presentation.patinet.patientFiles.PatientFilesViewModel
 import com.beapps.thedoctorapp.content.presentation.patinet.patientFiles.components.PatientFileItem
 import com.beapps.thedoctorapp.core.domain.Error
 import com.beapps.thedoctorapp.core.domain.Patient
@@ -52,7 +55,16 @@ fun PatientFilesScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = true) {
+    BackHandler {
+        if (screenState.showGraphsOnly) {
+            onEvent(PatientFilesViewModel.PatientFilesScreenEvents.ShowGraphsOnly(false))
+        }
+        else {
+            navController.navigateUp()
+        }
+    }
+
+    LaunchedEffect(key1 = screenState.showGraphsOnly) {
         patient?.let {
             onEvent(
                 PatientFilesViewModel.PatientFilesScreenEvents.GetPatientFiles(
@@ -70,12 +82,19 @@ fun PatientFilesScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Purple40),
                 title = {
                     Text(
-                        text = "Files",
+                        text = if (screenState.showGraphsOnly) "Graphs" else "Files",
                         color = Color.White
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (screenState.showGraphsOnly) {
+                            onEvent(PatientFilesViewModel.PatientFilesScreenEvents.ShowGraphsOnly(false))
+                        }
+                        else {
+                            navController.navigateUp()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "back"
@@ -124,7 +143,7 @@ fun PatientFilesScreen(
                     onActiveChange = { },
                     placeholder = {
                         Text(
-                            text = "Search Files .. ", fontSize = 14.sp
+                            text = if (screenState.showGraphsOnly) "Search Graphs .. " else "Search Files .. ", fontSize = 14.sp
                         )
                     },
                     leadingIcon = {
@@ -138,6 +157,34 @@ fun PatientFilesScreen(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    if (!screenState.showGraphsOnly) {
+                        item {
+                            Column(modifier = Modifier
+                                .clickable {
+                                    onEvent(
+                                        PatientFilesViewModel.PatientFilesScreenEvents.ShowGraphsOnly(
+                                            true
+                                        )
+                                    )
+                                }
+                                .padding(16.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(
+                                    imageVector = Icons.Default.AutoGraph,
+                                    contentDescription = "Graphs",
+                                    modifier = Modifier.size(32.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Graphs"
+                                )
+                            }
+                            HorizontalDivider()
+                        }
+                    }
 
                     items(screenState.filteredPatientFiles) { patientContent ->
                         PatientFileItem(patientFile = patientContent, onClick = {
@@ -164,7 +211,7 @@ fun PatientFilesScreen(
 }
 
 @Composable
-fun PatientContentScreenRoot(
+fun PatientFilesScreenRoot(
     navController: NavController,
     patient: Patient?
 ) {
