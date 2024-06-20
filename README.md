@@ -28,6 +28,8 @@ so let`s talk more about how i acheived the clean arch guidlines on this app cod
 
 -- MPAndroidChart Lib To Draw Charts , link of lib 🔗 : https://github.com/PhilJay/MPAndroidChart
 
+-- dagger-hilt (for dependency Injection) 
+
 -- coroutines , flows , viewModel , ForegroundServices , Notification SDk and more ..
 
 
